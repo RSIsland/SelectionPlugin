@@ -1,0 +1,11 @@
+
+# Eclipse:
+
+.classpath
+.settings/
+target/
+.project
+
+# Custom:
+
+compile.sh
