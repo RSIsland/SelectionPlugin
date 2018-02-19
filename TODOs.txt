@@ -1,0 +1,18 @@
+TODOs:
+
+-> API:
+	Hide everything which should not be accessed.
+	Provide proper control/ getters/setters.
+	¿Threadsafe?
+	Commenting
+	
+-> Structure:
+	Sort classes
+	Rename things properly
+	
+-> Features:
+	WE support (rather not :/ )
+	Commands.
+	Share selections (requires refactoring - not much though)
+	¿save/load?
+	Player selfdestruction.

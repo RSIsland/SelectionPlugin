@@ -1,0 +1,9 @@
+main: ${groupId}.${artifactId}
+name: ${artifactId}
+version: ${version}
+
+author: Ecconia
+description: Get selections for your plugins
+
+commands:
+  sel:
