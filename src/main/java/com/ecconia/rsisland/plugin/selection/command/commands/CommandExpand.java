@@ -34,7 +34,7 @@ public class CommandExpand extends Subcommand
 	public void exec(CommandSender sender, String[] args)
 	{
 		Player player = (Player) sender;
-		SelPlayer selPlayer = plugin.getPlayer(player);
+		SelPlayer selPlayer = plugin.getIntPlayer(player);
 		
 		int params = args.length;
 		
@@ -145,7 +145,7 @@ public class CommandExpand extends Subcommand
 	{
 		if (args.length == 1)
 		{
-			SelPlayer player = plugin.getPlayer((Player) sender);
+			SelPlayer player = plugin.getIntPlayer((Player) sender);
 			List<String> selections = player.getSelectionNames().stream().filter(name -> StringUtil.startsWithIgnoreCase(name, args[0])).collect(Collectors.toList());
 			
 			return selections;

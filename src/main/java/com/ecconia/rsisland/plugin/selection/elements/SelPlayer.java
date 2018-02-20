@@ -13,10 +13,12 @@ import com.ecconia.rsisland.plugin.selection.Direction;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Hand;
 import com.ecconia.rsisland.plugin.selection.Point;
+import com.ecconia.rsisland.plugin.selection.api.ISelPlayer;
+import com.ecconia.rsisland.plugin.selection.api.ISelection;
 import com.ecconia.rsisland.plugin.selection.cui.ICUICore;
 import com.ecconia.rsisland.plugin.selection.interfaces.ItemManager;
 
-public class SelPlayer
+public class SelPlayer implements ISelPlayer
 {
 	private Player player;
 	
@@ -52,11 +54,11 @@ public class SelPlayer
 		boolean overwroteBoth;
 		if(hand.isFirstPos())
 		{
-			overwroteBoth = sel.setPosFirst(location);
+			overwroteBoth = sel.setFirstPoint(location);
 		}
 		else
 		{
-			overwroteBoth = sel.setPosSecond(location);
+			overwroteBoth = sel.setSecondPoint(location);
 		}
 		
 		if(overwroteBoth)
@@ -123,7 +125,7 @@ public class SelPlayer
 		
 		lastEditedSelection = sel;
 		
-		if(sel.isNotSet())
+		if(sel.isEmpty())
 		{
 			F.e(player, "Selection %v is empty. Changes not possible.", name);
 			return;
@@ -141,15 +143,15 @@ public class SelPlayer
 			Point vector = dir.getDirectionVector();
 			if(vector.getX() != 0)
 			{
-				shrinkedMax = sel.getPosFirst().getBlockX() == sel.getPosSecond().getBlockX();
+				shrinkedMax = sel.getFirstPoint().getBlockX() == sel.getSecondPoint().getBlockX();
 			}
 			else if(vector.getY() != 0)
 			{
-				shrinkedMax = sel.getPosFirst().getBlockY() == sel.getPosSecond().getBlockY();
+				shrinkedMax = sel.getFirstPoint().getBlockY() == sel.getSecondPoint().getBlockY();
 			}
 			else if(vector.getZ() != 0)
 			{
-				shrinkedMax = sel.getPosFirst().getBlockZ() == sel.getPosSecond().getBlockZ();
+				shrinkedMax = sel.getFirstPoint().getBlockZ() == sel.getSecondPoint().getBlockZ();
 			}
 			
 			if(shrinkedMax)
@@ -209,5 +211,17 @@ public class SelPlayer
 		lastEditedSelection = selection;
 		
 		F.n(player, "Set %v active.", name);
+	}
+
+	
+	@Override
+	public ISelection getSelectionOrCurrent(String name)
+	{
+		Selection selection = getSelection(name);
+		if(selection == null)
+		{
+			selection = lastEditedSelection;
+		}
+		return (ISelection) selection;
 	}
 }

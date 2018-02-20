@@ -87,7 +87,7 @@ public class CUIPlayer
 	
 	private void getExistingSelections()
 	{
-		SelPlayer selPlayer = plugin.getPlayer(player);
+		SelPlayer selPlayer = plugin.getIntPlayer(player);
 		for(Selection sel : selPlayer.getSelections())
 		{
 			createSelection(sel);

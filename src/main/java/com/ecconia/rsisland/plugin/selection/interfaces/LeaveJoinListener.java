@@ -22,7 +22,7 @@ public class LeaveJoinListener implements Listener
 	public void onLeave(PlayerQuitEvent event)
 	{
 		Player player = event.getPlayer();
-		SelPlayer sel = plugin.getPlayer(player);
+		SelPlayer sel = plugin.getIntPlayer(player);
 		sel.updatePlayer(null);
 	}
 	
@@ -30,7 +30,7 @@ public class LeaveJoinListener implements Listener
 	public void onLeave(PlayerJoinEvent event)
 	{
 		Player player = event.getPlayer();
-		SelPlayer sel = plugin.getPlayer(player);
+		SelPlayer sel = plugin.getIntPlayer(player);
 		sel.updatePlayer(player);
 	}
 }

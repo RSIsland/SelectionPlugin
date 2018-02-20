@@ -35,8 +35,8 @@ public class CUISelection
 	{
 		builder.createSelection(uuid);
 		builder.setColor(color);
-		if(selection.getPosFirst() != null) builder.setPoint(0, selection.getPosFirst());
-		if(selection.getPosSecond() != null) builder.setPoint(1, selection.getPosSecond());
+		if(selection.getFirstPoint() != null) builder.setPoint(0, selection.getFirstPoint());
+		if(selection.getSecondPoint() != null) builder.setPoint(1, selection.getSecondPoint());
 	}
 	
 	/**

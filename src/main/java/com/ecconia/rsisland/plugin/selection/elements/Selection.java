@@ -6,8 +6,9 @@ import org.bukkit.Location;
 
 import com.ecconia.rsisland.plugin.selection.Direction;
 import com.ecconia.rsisland.plugin.selection.Point;
+import com.ecconia.rsisland.plugin.selection.api.ISelection;
 
-public class Selection
+public class Selection implements ISelection
 {
 	private String name;
 	
@@ -29,7 +30,7 @@ public class Selection
 	/**
 	 * @return boolean - False if the other position also got changed.
 	 */
-	public boolean setPosFirst(Location location)
+	public boolean setFirstPoint(Location location)
 	{
 		boolean noChangesOther = true;
 		pos1 = location.clone();
@@ -47,7 +48,7 @@ public class Selection
 	/**
 	 * @return boolean - False if the other position also got changed.
 	 */
-	public boolean setPosSecond(Location location)
+	public boolean setSecondPoint(Location location)
 	{
 		boolean noChangesOther = true;
 		pos2 = location.clone();
@@ -69,7 +70,7 @@ public class Selection
 		return pos1 == null || pos2 == null;
 	}
 	
-	public boolean isNotSet()
+	public boolean isEmpty()
 	{
 		return pos1 == null && pos2 == null;
 	}
@@ -79,22 +80,22 @@ public class Selection
 		return name;
 	}
 
-	public Location getPosFirst()
+	public Location getFirstPoint()
 	{
 		return pos1.clone();
 	}
 	
-	public Location getPosSecond()
+	public Location getSecondPoint()
 	{
 		return pos2.clone();
 	}
 	
-	public Location getMin()
+	public Location getMinPoint()
 	{
 		return wrapper.getMin();
 	}
 	
-	public Location getMax()
+	public Location getMaxPoint()
 	{
 		return wrapper.getMax();
 	}
@@ -288,4 +289,5 @@ public class Selection
 			return new Location(p1.getWorld(), getBigX(), getBigY(), getBigZ());
 		}
 	}
+
 }

@@ -10,6 +10,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.ecconia.rsisland.plugin.selection.api.ISelPlayer;
+import com.ecconia.rsisland.plugin.selection.api.SelectionAPI;
 import com.ecconia.rsisland.plugin.selection.command.commands.CommandCUI;
 import com.ecconia.rsisland.plugin.selection.command.commands.CommandExpand;
 import com.ecconia.rsisland.plugin.selection.command.commands.CommandMove;
@@ -26,7 +28,7 @@ import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
 import com.ecconia.rsisland.plugin.selection.interfaces.LeaveJoinListener;
 import com.ecconia.rsisland.plugin.selection.interfaces.ToolUsageListener;
 
-public class SelectionPlugin extends JavaPlugin
+public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 {
 	public static final String prefix = ChatColor.WHITE + "[" + ChatColor.GOLD + "Select" + ChatColor.WHITE + "] ";
 	public static final String itemName = "SelectionTool: ";
@@ -69,7 +71,7 @@ public class SelectionPlugin extends JavaPlugin
 
 	public void actionToolClickAir(Player player, String name, Direction dir, Hand hand)
 	{
-		SelPlayer splayer = getPlayer(player);
+		SelPlayer splayer = getIntPlayer(player);
 		
 		splayer.actionToolClickAir(name, dir, hand);
 	}
@@ -78,12 +80,12 @@ public class SelectionPlugin extends JavaPlugin
 	{
 		//player.sendMessage(prefix + ChatColor.GRAY + "You set the " + ChatColor.GOLD + (hand.isFirstPos() ? "first" : "second") + ChatColor.GRAY + " position of your selection " + ChatColor.GOLD + name + ChatColor.GRAY + " to " + ChatColor.GOLD + target.getBlockX() + ", " + target.getBlockY() + ", " + target.getBlockZ() + ChatColor.GRAY + ".");
 		
-		SelPlayer splayer = getPlayer(player);
+		SelPlayer splayer = getIntPlayer(player);
 		
 		splayer.actionToolClickBlock(name, hand, location, blockFace);
 	}
 	
-	public SelPlayer getPlayer(Player player)
+	public SelPlayer getIntPlayer(Player player)
 	{
 		SelPlayer selPlayer = players.get(player.getUniqueId());
 		if(selPlayer == null)
@@ -92,5 +94,11 @@ public class SelectionPlugin extends JavaPlugin
 			players.put(player.getUniqueId(), selPlayer);
 		}
 		return selPlayer;
+	}
+
+	@Override
+	public ISelPlayer getPlayer(Player player)
+	{
+		return (ISelPlayer) getPlayer(player);
 	}
 }
