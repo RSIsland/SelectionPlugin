@@ -155,7 +155,7 @@ public class Selection
 		}
 	}
 	
-	public void move(Set<Direction> dirs, Integer amount)
+	public void move(Set<Direction> dirs, int amount)
 	{
 		Point vec = new Point(0, 0, 0);
 		
