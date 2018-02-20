@@ -1,4 +1,4 @@
-main: ${groupId}.${artifactId}
+main: ${groupId}.${parent.artifactId}
 name: ${artifactId}
 version: ${version}
 
