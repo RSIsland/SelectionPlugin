@@ -4,9 +4,9 @@ import java.util.Set;
 
 import org.bukkit.Location;
 
-import com.ecconia.rsisland.plugin.selection.Direction;
-import com.ecconia.rsisland.plugin.selection.Point;
+import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelection;
+import com.ecconia.rsisland.plugin.selection.api.Point;
 
 public class Selection implements ISelection
 {

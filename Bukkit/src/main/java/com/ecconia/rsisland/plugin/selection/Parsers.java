@@ -3,6 +3,7 @@ package com.ecconia.rsisland.plugin.selection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.exceptions.ParseException;
 
 public class Parsers

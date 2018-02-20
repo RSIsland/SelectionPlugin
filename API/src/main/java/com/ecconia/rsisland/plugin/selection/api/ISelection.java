@@ -4,8 +4,6 @@ import java.util.Set;
 
 import org.bukkit.Location;
 
-import com.ecconia.rsisland.plugin.selection.Direction;
-
 //TODO: Descriptions
 //TODO: Set booleans?
 public interface ISelection

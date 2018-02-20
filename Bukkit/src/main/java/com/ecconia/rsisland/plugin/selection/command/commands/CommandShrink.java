@@ -10,23 +10,23 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import com.ecconia.rsisland.plugin.selection.Direction;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Parsers;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
+import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.command.framework.Subcommand;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
 import com.ecconia.rsisland.plugin.selection.exceptions.InvalidNameException;
 import com.ecconia.rsisland.plugin.selection.exceptions.ParseException;
 
-public class CommandExpand extends Subcommand
+public class CommandShrink extends Subcommand
 {
 	private SelectionPlugin plugin;
 	
-	public CommandExpand(SelectionPlugin plugin)
+	public CommandShrink(SelectionPlugin plugin)
 	{
-		super("expand");
+		super("shrink");
 		this.plugin = plugin;
 	}
 
@@ -103,7 +103,7 @@ public class CommandExpand extends Subcommand
 			}
 			else
 			{
-				F.e(player, "Usage: /sel edit expand <amount> [dirs] OR /sel edit expand <name> <amount> <dirs>");
+				F.e(player, "Usage: /sel edit shrink <amount> [dirs] OR /sel edit shrink <name> <amount> <dirs>");
 				return;
 			}
 		}
@@ -125,15 +125,15 @@ public class CommandExpand extends Subcommand
 			amount = -amount;
 			dirs = Direction.invertDirections(dirs);
 			
-			selection.shrink(dirs, amount);
-			//TODO: Details
-			F.n(player, "Shrinked your selection.");
-		}
-		else
-		{
 			selection.expand(dirs, amount);
 			//TODO: Details
 			F.n(player, "Expanded your selection.");
+		}
+		else
+		{
+			selection.shrink(dirs, amount);
+			//TODO: Details
+			F.n(player, "Shrinked your selection.");
 		}
 		
 		//TODO proper calling, should be in the changing methods included

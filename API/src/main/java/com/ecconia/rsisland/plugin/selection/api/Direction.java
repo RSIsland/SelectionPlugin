@@ -1,4 +1,4 @@
-package com.ecconia.rsisland.plugin.selection;
+package com.ecconia.rsisland.plugin.selection.api;
 
 import java.util.HashMap;
 import java.util.HashSet;

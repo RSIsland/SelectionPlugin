@@ -9,12 +9,12 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-import com.ecconia.rsisland.plugin.selection.Direction;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Hand;
-import com.ecconia.rsisland.plugin.selection.Point;
+import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelPlayer;
 import com.ecconia.rsisland.plugin.selection.api.ISelection;
+import com.ecconia.rsisland.plugin.selection.api.Point;
 import com.ecconia.rsisland.plugin.selection.cui.ICUICore;
 import com.ecconia.rsisland.plugin.selection.interfaces.ItemManager;
 

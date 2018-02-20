@@ -10,6 +10,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelPlayer;
 import com.ecconia.rsisland.plugin.selection.api.SelectionAPI;
 import com.ecconia.rsisland.plugin.selection.command.commands.CommandCUI;

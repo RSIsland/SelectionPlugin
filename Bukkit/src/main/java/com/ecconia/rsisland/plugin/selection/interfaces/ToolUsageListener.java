@@ -8,10 +8,10 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.ecconia.rsisland.plugin.selection.Direction;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Hand;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
+import com.ecconia.rsisland.plugin.selection.api.Direction;
 
 public class ToolUsageListener implements Listener
 {

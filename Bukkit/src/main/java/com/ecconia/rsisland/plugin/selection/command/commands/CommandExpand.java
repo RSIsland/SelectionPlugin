@@ -10,23 +10,23 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import com.ecconia.rsisland.plugin.selection.Direction;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Parsers;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
+import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.command.framework.Subcommand;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
 import com.ecconia.rsisland.plugin.selection.exceptions.InvalidNameException;
 import com.ecconia.rsisland.plugin.selection.exceptions.ParseException;
 
-public class CommandMove extends Subcommand
+public class CommandExpand extends Subcommand
 {
 	private SelectionPlugin plugin;
 	
-	public CommandMove(SelectionPlugin plugin)
+	public CommandExpand(SelectionPlugin plugin)
 	{
-		super("move");
+		super("expand");
 		this.plugin = plugin;
 	}
 
@@ -82,7 +82,6 @@ public class CommandMove extends Subcommand
 			}
 			else if(params == 2)
 			{
-				String dirsInput;
 				amount = Parsers.parseInt(args[0]);
 				if(amount == null)
 				{
@@ -94,23 +93,17 @@ public class CommandMove extends Subcommand
 					}
 					else
 					{
-						dirsInput = args[0];
+						dirs = Parsers.parseDirection(args[0], head);
 					}
 				}
 				else
 				{
-					dirsInput = args[1];
+					dirs = Parsers.parseDirection(args[1], head);
 				}
-				if(dirsInput.equals("a"))
-				{
-					F.e(player, "Moved in all directions, done. :/");
-					return;
-				}
-				dirs = Parsers.parseDirection(dirsInput, head);
 			}
 			else
 			{
-				F.e(player, "Usage: /sel edit move <amount> [dirs] OR /sel edit move <name> <amount> <dirs>");
+				F.e(player, "Usage: /sel edit expand <amount> [dirs] OR /sel edit expand <name> <amount> <dirs>");
 				return;
 			}
 		}
@@ -127,28 +120,24 @@ public class CommandMove extends Subcommand
 			return;
 		}
 		
-		for(Direction d : dirs)
-		{
-			Direction op = Direction.getOppositeDirection(d);
-			if(dirs.contains(op))
-			{
-				F.e(player, "Direction %v and %v are opposite to each other.", d, op);
-				return;
-			}
-		}
-		
 		if(amount < 0)
 		{
 			amount = -amount;
 			dirs = Direction.invertDirections(dirs);
+			
+			selection.shrink(dirs, amount);
+			//TODO: Details
+			F.n(player, "Shrinked your selection.");
+		}
+		else
+		{
+			selection.expand(dirs, amount);
+			//TODO: Details
+			F.n(player, "Expanded your selection.");
 		}
 		
-		selection.move(dirs, amount);
-		//TODO proper calling
+		//TODO proper calling, should be in the changing methods included
 		selPlayer.update(selection);
-		
-		//TODO: Details
-		F.n(player, "Moved your selection.");
 	}
 	
 	@Override
