@@ -21,7 +21,7 @@
 			<groupId>com.ecconia.rsisland.plugin.selection</groupId>
 			<artifactId>SelectionPlugin-API</artifactId>
 			<version>1</version>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
@@ -42,6 +42,34 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>${shade.version}</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<!--
+							<artifactSet>
+								<includes>
+									<include>com.ecconia.rsisland.plugin.selection:SelectionPlugin-API:jar:1</include>
+								</includes>
+							</artifactSet>
+							 TODO: Somehow this is the only way it includes the API in the jar, what is the proper way to include it. 
+							-->
+							<filters>
+								<filter>
+									<artifact>com.ecconia.rsisland.plugin.selection:SelectionPlugin-API:jar:1</artifact>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
