@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ecconia.rsisland.plugin.selection.api.Direction;
@@ -37,6 +38,13 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 	
 	private Map<UUID, SelPlayer> players = new HashMap<>();
 	private ICUICore cuiCore;
+	
+	@Override
+	public void onLoad()
+	{
+		//Register API
+		getServer().getServicesManager().register(SelectionAPI.class, this, this, ServicePriority.Normal);
+	}
 	
 	@Override
 	public void onEnable()
