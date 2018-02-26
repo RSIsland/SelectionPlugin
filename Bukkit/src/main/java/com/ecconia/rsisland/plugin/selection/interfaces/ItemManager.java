@@ -30,7 +30,7 @@ public class ItemManager
 		{
 			String name = meta.getDisplayName();
 			
-			if(name.startsWith(SelectionPlugin.itemName))
+			if(name != null && name.startsWith(SelectionPlugin.itemName))
 			{
 				name = name.substring(SelectionPlugin.itemName.length());
 				if(name.matches(SelectionPlugin.itemNameFormat))
