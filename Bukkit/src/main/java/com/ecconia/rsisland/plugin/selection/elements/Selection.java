@@ -32,17 +32,17 @@ public class Selection implements ISelection
 	 */
 	public boolean setFirstPoint(Location location)
 	{
-		boolean noChangesOther = true;
+		boolean changedBoth = false;
 		pos1 = location.clone();
 		
 		if(pos2 == null || (pos2 != null && !pos2.getWorld().equals(pos1.getWorld())))
 		{
 			pos2 = pos1.clone();
-			noChangesOther = false;
+			changedBoth = true;
 		}
 		
 		refreshMinMax();
-		return noChangesOther;
+		return changedBoth;
 	}
 
 	/**
@@ -50,17 +50,17 @@ public class Selection implements ISelection
 	 */
 	public boolean setSecondPoint(Location location)
 	{
-		boolean noChangesOther = true;
+		boolean changedBoth = false;
 		pos2 = location.clone();
 		
 		if(pos1 == null || (pos1 != null && !pos1.getWorld().equals(pos2.getWorld())))
 		{
 			pos1 = pos2.clone();
-			noChangesOther = false;
+			changedBoth = true;
 		}
 		
 		refreshMinMax();
-		return noChangesOther;
+		return changedBoth;
 	}
 	
 	//#########################################################################
