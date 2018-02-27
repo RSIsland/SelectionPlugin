@@ -1,4 +1,4 @@
-package com.ecconia.rsisland.plugin.selection.command.commands;
+package com.ecconia.rsisland.plugin.selection.commands;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,11 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
+import com.ecconia.rsisland.framework.cofami.Subcommand;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Parsers;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
 import com.ecconia.rsisland.plugin.selection.api.Direction;
-import com.ecconia.rsisland.plugin.selection.command.framework.Subcommand;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
 import com.ecconia.rsisland.plugin.selection.exceptions.InvalidNameException;
@@ -28,12 +28,15 @@ public class CommandExpand extends Subcommand
 	{
 		super("expand");
 		this.plugin = plugin;
+		onlyPlayer();
 	}
 
 	@Override
 	public void exec(CommandSender sender, String[] args)
 	{
-		Player player = (Player) sender;
+		checkPermission(sender);
+		
+		Player player = getPlayer(sender);
 		SelPlayer selPlayer = plugin.getIntPlayer(player);
 		
 		int params = args.length;

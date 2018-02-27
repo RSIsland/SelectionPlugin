@@ -1,9 +1,8 @@
-package com.ecconia.rsisland.plugin.selection.command.commands;
+package com.ecconia.rsisland.plugin.selection.commands;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import com.ecconia.rsisland.plugin.selection.command.framework.Subcommand;
+import com.ecconia.rsisland.framework.cofami.Subcommand;
 import com.ecconia.rsisland.plugin.selection.cui.ICUICore;
 
 public class CommandCUI extends Subcommand
@@ -14,11 +13,14 @@ public class CommandCUI extends Subcommand
 	{
 		super("cui");
 		this.cui = cui;
+		onlyPlayer();
 	}
 
 	@Override
 	public void exec(CommandSender sender, String[] args)
 	{
-		cui.forceEnable((Player) sender);
+		checkPermission(sender);
+		
+		cui.forceEnable(getPlayer(sender));
 	}
 }

@@ -11,19 +11,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.ecconia.rsisland.framework.cofami.CommandHandler;
+import com.ecconia.rsisland.framework.cofami.Feedback;
+import com.ecconia.rsisland.framework.cofami.GroupSubcommand;
 import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelPlayer;
 import com.ecconia.rsisland.plugin.selection.api.SelectionAPI;
-import com.ecconia.rsisland.plugin.selection.command.commands.CommandCUI;
-import com.ecconia.rsisland.plugin.selection.command.commands.CommandExpand;
-import com.ecconia.rsisland.plugin.selection.command.commands.CommandMove;
-import com.ecconia.rsisland.plugin.selection.command.commands.CommandRemove;
-import com.ecconia.rsisland.plugin.selection.command.commands.CommandShrink;
-import com.ecconia.rsisland.plugin.selection.command.commands.CommandUse;
-import com.ecconia.rsisland.plugin.selection.command.commands.GiveTool;
-import com.ecconia.rsisland.plugin.selection.command.framework.CommandGroup;
-import com.ecconia.rsisland.plugin.selection.command.framework.CommandHandler;
-import com.ecconia.rsisland.plugin.selection.command.framework.Subcommand;
+import com.ecconia.rsisland.plugin.selection.commands.CommandCUI;
+import com.ecconia.rsisland.plugin.selection.commands.CommandExpand;
+import com.ecconia.rsisland.plugin.selection.commands.CommandMove;
+import com.ecconia.rsisland.plugin.selection.commands.CommandRemove;
+import com.ecconia.rsisland.plugin.selection.commands.CommandShrink;
+import com.ecconia.rsisland.plugin.selection.commands.CommandUse;
+import com.ecconia.rsisland.plugin.selection.commands.GiveTool;
 import com.ecconia.rsisland.plugin.selection.cui.CUICore;
 import com.ecconia.rsisland.plugin.selection.cui.ICUICore;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
@@ -63,19 +63,19 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 	
 	private void initCommands()
 	{
-		getCommand("sel").setExecutor(new CommandHandler(this, new Subcommand[] {
-			new GiveTool(),
-			new CommandGroup("manage", new Subcommand[] {
-				new CommandRemove(this),
-			}),
-			new CommandGroup("edit", new Subcommand[] {
-				new CommandExpand(this),
-				new CommandShrink(this),
-				new CommandMove(this),
-			}),
-			new CommandCUI(cuiCore),
-			new CommandUse(this),
-		}));
+		new CommandHandler(this, new Feedback(prefix), new GroupSubcommand("sel"
+			,new GiveTool()
+			,new GroupSubcommand("manage"
+				,new CommandRemove(this)
+			)
+			,new GroupSubcommand("edit"
+				,new CommandExpand(this)
+				,new CommandShrink(this)
+				,new CommandMove(this)
+			)
+			,new CommandCUI(cuiCore)
+			,new CommandUse(this)
+		));
 	}
 
 	public void actionToolClickAir(Player player, String name, Direction dir, Hand hand)

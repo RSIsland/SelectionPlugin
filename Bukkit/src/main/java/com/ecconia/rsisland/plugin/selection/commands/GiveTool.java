@@ -1,13 +1,13 @@
-package com.ecconia.rsisland.plugin.selection.command.commands;
+package com.ecconia.rsisland.plugin.selection.commands;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.ecconia.rsisland.framework.cofami.Subcommand;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
-import com.ecconia.rsisland.plugin.selection.command.framework.Subcommand;
 import com.ecconia.rsisland.plugin.selection.interfaces.ItemManager;
 
 public class GiveTool extends Subcommand
@@ -15,6 +15,7 @@ public class GiveTool extends Subcommand
 	public GiveTool()
 	{
 		super("tool");
+		onlyPlayer();
 	}
 
 	@Override

@@ -23,6 +23,12 @@
 			<version>1</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.ecconia.rsisland.framework.cofami</groupId>
+			<artifactId>Cofami</artifactId>
+			<version>1</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

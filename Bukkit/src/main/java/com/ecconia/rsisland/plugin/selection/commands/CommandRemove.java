@@ -1,4 +1,4 @@
-package com.ecconia.rsisland.plugin.selection.command.commands;
+package com.ecconia.rsisland.plugin.selection.commands;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,9 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
+import com.ecconia.rsisland.framework.cofami.Subcommand;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
-import com.ecconia.rsisland.plugin.selection.command.framework.Subcommand;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
 import com.ecconia.rsisland.plugin.selection.exceptions.InvalidNameException;
 
@@ -24,12 +24,15 @@ public class CommandRemove extends Subcommand
 		super("remove");
 		
 		this.plugin = plugin;
+		onlyPlayer();
 	}
 
 	@Override
 	public void exec(CommandSender sender, String[] args)
 	{
-		SelPlayer player = plugin.getIntPlayer((Player) sender);
+		checkPermission(sender);
+		
+		SelPlayer player = plugin.getIntPlayer(getPlayer(sender));
 		
 		String selection = null;
 		

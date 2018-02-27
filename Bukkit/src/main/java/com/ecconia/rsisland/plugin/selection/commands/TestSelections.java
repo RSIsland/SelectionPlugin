@@ -1,4 +1,4 @@
-package com.ecconia.rsisland.plugin.selection.command.commands;
+package com.ecconia.rsisland.plugin.selection.commands;
 //package de.ecconia.bukkit.plugin.selectionunit.command;
 //
 //import java.util.ArrayList;
