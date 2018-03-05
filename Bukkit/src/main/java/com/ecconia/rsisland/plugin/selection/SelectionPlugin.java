@@ -108,6 +108,6 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 	@Override
 	public ISelPlayer getPlayer(Player player)
 	{
-		return (ISelPlayer) getPlayer(player);
+		return (ISelPlayer) getIntPlayer(player);
 	}
 }
