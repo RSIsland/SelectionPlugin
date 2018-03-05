@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.bukkit.Location;
 
+import com.ecconia.rsisland.framework.commonelements.Point;
+
 public enum Direction
 {
 	NORTH	('n', 0, 0,-1),

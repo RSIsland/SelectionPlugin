@@ -4,9 +4,10 @@ import java.util.Set;
 
 import org.bukkit.Location;
 
+import com.ecconia.rsisland.framework.commonelements.Area;
+import com.ecconia.rsisland.framework.commonelements.Point;
 import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelection;
-import com.ecconia.rsisland.plugin.selection.api.Point;
 
 public class Selection implements ISelection
 {
@@ -98,6 +99,12 @@ public class Selection implements ISelection
 	public Location getMaxPoint()
 	{
 		return wrapper.getMax();
+	}
+
+	@Override
+	public Area getArea()
+	{
+		return new Area(pos1.getWorld(), new Point(wrapper.getMin()), new Point(wrapper.getMax()));
 	}
 	
 	//#########################################################################

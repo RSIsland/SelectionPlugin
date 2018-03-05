@@ -4,6 +4,8 @@ import java.util.Set;
 
 import org.bukkit.Location;
 
+import com.ecconia.rsisland.framework.commonelements.Area;
+
 //TODO: Descriptions
 //TODO: Set booleans?
 public interface ISelection
@@ -38,6 +40,13 @@ public interface ISelection
 	 */
 	public Location getMaxPoint();
 	
+	/**
+	 * Return the Area, which provides world, min and amx postion.
+	 * 
+	 * @return area - the area of the selection
+	 */
+	Area getArea();
+
 	//#########################################################################
 	
 	/**
@@ -51,6 +60,7 @@ public interface ISelection
 	 * @param point - first position of the selection.
 	 */
 	public boolean setFirstPoint(Location point);
+
 	/**
 	 * 
 	 * @param point - second position of the selection.

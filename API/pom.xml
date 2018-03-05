@@ -17,6 +17,12 @@
 			<version>1.12.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.ecconia.rsisland.framework.commonelements</groupId>
+			<artifactId>CommonElements</artifactId>
+			<version>1</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	
 	<build>
