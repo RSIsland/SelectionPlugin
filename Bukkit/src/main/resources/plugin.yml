@@ -1,5 +1,5 @@
-main: ${groupId}.${parent.artifactId}
-name: ${parent.artifactId}
+main: ${groupId}.${project.parent.artifactId}
+name: ${project.parent.artifactId}
 version: ${version}
 
 author: Ecconia
