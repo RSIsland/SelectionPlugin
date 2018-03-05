@@ -35,7 +35,7 @@
 
 	<profiles>
         <profile>
-            <id>deployment</id>
+            <id>js</id>
             <build>
                 <plugins>
                     <plugin>
