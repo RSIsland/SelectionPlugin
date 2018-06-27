@@ -1,12 +1,15 @@
 package com.ecconia.rsisland.plugin.selection.cui;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
+import com.ecconia.rsisland.plugin.selection.api.CUIArea;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
@@ -18,6 +21,8 @@ public class CUIPlayer
 	private boolean delayedVersion;
 	
 	private Map<Selection, CUISelection> selections;
+	
+	//TODO: Add set of all cui-selections
 	
 	private SelectionPlugin plugin;
 	private Player player;
@@ -62,7 +67,8 @@ public class CUIPlayer
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
-		if(enabled == true)
+		
+		if(enabled)
 		{
 			if(version == null)
 			{
@@ -105,6 +111,7 @@ public class CUIPlayer
 	public void destroySelection(Selection selection)
 	{
 		CUISelection sel = selections.get(selection);
+		
 		if(sel != null)
 		{
 			sel.destroy();
@@ -130,5 +137,30 @@ public class CUIPlayer
 			selections.put(selection, sel);
 		}
 		return sel;
+	}
+	
+	public void replaceSelections(List<CUIArea> selections)
+	{
+		for(CUISelection selection : this.selections.values())
+		{
+			selection.destroy();
+		}
+		
+		this.selections.clear();
+		
+		for(CUIArea selection : selections)
+		{
+			for(CUIArea.Room room : selection.getRooms())
+			{
+				CUIPacketSender builder = new CUIPacketSender(plugin, player);
+				
+				builder.createSelection(UUID.randomUUID());
+				builder.setColor(selection.getColor());
+				builder.setGrid(0.0);
+				
+				builder.setPoint(0, room.getP1());
+				builder.setPoint(1, room.getP2());
+			}
+		}
 	}
 }

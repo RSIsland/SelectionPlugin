@@ -7,6 +7,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.ecconia.rsisland.framework.commonelements.Point;
+import com.ecconia.rsisland.plugin.selection.api.CUIArea;
+
 public class CUIPacketSender
 {
 	private final Plugin plugin;
@@ -17,7 +20,7 @@ public class CUIPacketSender
 		this.plugin = plugin;
 		this.player = player;
 	}
-
+	
 	public void createSelection(UUID uuid)
 	{
 		sendMessage(newMessage(true, CUIPackets.SELECTION, "cuboid", uuid));
@@ -33,16 +36,31 @@ public class CUIPacketSender
 		sendMessage(newMessage(true, CUIPackets.COLOR, color.getBounds(), color.getGrid(), color.getPoint1(), color.getPoint2()));
 	}
 	
+	public void setColor(CUIArea.Color color)
+	{
+		sendMessage(newMessage(true, CUIPackets.COLOR, color.getBounds(), color.getGrid(), color.getPoint1(), color.getPoint2()));
+	}
+	
 	public void setPoint(int which, Location location)
 	{
 		sendMessage(newMessage(true, CUIPackets.POINT, which, location.getBlockX(), location.getBlockY(), location.getBlockZ(), ""));
+	}
+	
+	public void setPoint(int which, Point point)
+	{
+		sendMessage(newMessage(true, CUIPackets.POINT, which, point.getX(), point.getY(), point.getZ(), ""));
+	}
+	
+	public void setGrid(Double grid)
+	{
+		sendMessage(newMessage(true, CUIPackets.GRID, grid));
 	}
 	
 	private void sendMessage(String message)
 	{
 		player.sendPluginMessage(plugin, CUICore.channel, message.getBytes(Charset.forName("UTF-8")));
 	}
-
+	
 	private String newMessage(boolean multi, CUIPackets type, Object... arguments)
 	{
 		StringBuilder message = new StringBuilder();
@@ -59,7 +77,7 @@ public class CUIPacketSender
 		
 		return message.toString();
 	}
-
+	
 	public void setGrid(int i)
 	{
 		sendMessage(newMessage(true, CUIPackets.GRID, i));

@@ -1,6 +1,7 @@
 package com.ecconia.rsisland.plugin.selection.cui;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
+import com.ecconia.rsisland.plugin.selection.api.CUIArea;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
 public class CUICore implements Listener, ICUICore
@@ -150,12 +152,27 @@ public class CUICore implements Listener, ICUICore
 			cuiPlayers.get(player).updateSelection(selection);
 		}
 	}
-
+	
 	@Override
 	public void forceEnable(Player player)
 	{
 		CUIPlayer cuiPlayer = getOrCreateCUIPlayer(player);
 		cuiPlayer.setEnabled(true);
 		F.n(player, "Enabling CUI. Warning incompatibility possible.");
+	}
+	
+	@Override
+	public boolean cuiEnabled(Player player)
+	{
+		return hasCUI(player);
+	}
+	
+	@Override
+	public void replaceSelections(Player player, List<CUIArea> areas)
+	{
+		if(hasCUI(player))
+		{
+			cuiPlayers.get(player).replaceSelections(areas);
+		}
 	}
 }

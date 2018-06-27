@@ -2,6 +2,7 @@ package com.ecconia.rsisland.plugin.selection.elements;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import com.ecconia.rsisland.framework.commonelements.Point;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Hand;
+import com.ecconia.rsisland.plugin.selection.api.CUIArea;
 import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelPlayer;
 import com.ecconia.rsisland.plugin.selection.api.ISelection;
@@ -223,5 +225,17 @@ public class SelPlayer implements ISelPlayer
 			selection = lastEditedSelection;
 		}
 		return (ISelection) selection;
+	}
+
+	@Override
+	public boolean hasCUI()
+	{
+		return cui.cuiEnabled(player);
+	}
+	
+	@Override
+	public void setCUIAreas(List<CUIArea> areas)
+	{
+		cui.replaceSelections(player, areas);
 	}
 }
