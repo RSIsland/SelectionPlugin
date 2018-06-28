@@ -3,8 +3,9 @@ package com.ecconia.rsisland.plugin.selection.elements;
 import java.util.Set;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 
-import com.ecconia.rsisland.framework.commonelements.Area;
+import com.ecconia.rsisland.framework.commonelements.Cuboid;
 import com.ecconia.rsisland.framework.commonelements.Point;
 import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelection;
@@ -12,11 +13,9 @@ import com.ecconia.rsisland.plugin.selection.api.ISelection;
 public class Selection implements ISelection
 {
 	private String name;
+	private World world;
 	
-	private Location pos1;
-	private Location pos2;
-	
-	private ModificationWrapper wrapper;
+	private CuboidHelper h;
 	
 	public Selection(String name)
 	{
@@ -29,106 +28,69 @@ public class Selection implements ISelection
 	}
 	
 	/**
-	 * @return boolean - False if the other position also got changed.
+	 * @return boolean - true if the other position also got changed.
 	 */
 	public boolean setFirstPoint(Location location)
 	{
-		boolean changedBoth = false;
-		pos1 = location.clone();
+		boolean changedBoth = h == null || world != location.getWorld();
 		
-		if(pos2 == null || (pos2 != null && !pos2.getWorld().equals(pos1.getWorld())))
+		if(changedBoth)
 		{
-			pos2 = pos1.clone();
-			changedBoth = true;
+			Point p = new Point(location);
+			h.resetBoth(p, p);
+			world = location.getWorld();
+		}
+		else
+		{
+			h.resetFirst(new Point(location));
 		}
 		
-		refreshMinMax();
 		return changedBoth;
 	}
-
+	
 	/**
-	 * @return boolean - False if the other position also got changed.
+	 * @return boolean - true if the other position also got changed.
 	 */
 	public boolean setSecondPoint(Location location)
 	{
-		boolean changedBoth = false;
-		pos2 = location.clone();
+		//If first initialisation or world changed
+		boolean changedBoth = h == null || world != location.getWorld();
 		
-		if(pos1 == null || (pos1 != null && !pos1.getWorld().equals(pos2.getWorld())))
+		if(changedBoth)
 		{
-			pos1 = pos2.clone();
-			changedBoth = true;
+			Point p = new Point(location);
+			h.resetBoth(p, p);
+			world = location.getWorld();
+		}
+		else
+		{
+			h.resetSecond(new Point(location));
 		}
 		
-		refreshMinMax();
 		return changedBoth;
 	}
 	
 	//#########################################################################
 	
-	public boolean isIncomplete()
-	{
-		return pos1 == null || pos2 == null;
-	}
-	
-	public boolean isEmpty()
-	{
-		return pos1 == null && pos2 == null;
-	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public Location getFirstPoint()
-	{
-		return pos1.clone();
-	}
-	
-	public Location getSecondPoint()
-	{
-		return pos2.clone();
-	}
-	
-	public Location getMinPoint()
-	{
-		return wrapper.getMin();
-	}
-	
-	public Location getMaxPoint()
-	{
-		return wrapper.getMax();
-	}
-
-	@Override
-	public Area getArea()
-	{
-		return new Area(pos1.getWorld(), new Point(wrapper.getMin()), new Point(wrapper.getMax()));
-	}
-	
-	//#########################################################################
-	
-	private void refreshMinMax()
-	{
-		wrapper = new ModificationWrapper(pos1, pos2);
-	}
-	
 	public void expand(Direction dir, int amount)
 	{
+		if(h == null)
+		{
+			throw new IllegalStateException("Selection without any point to modify.");
+		}
+		
 		Point vec = dir.getDirectionVector().mul(amount);
 		
 		if(dir.isPositive())
 		{
-			wrapper.addMax(vec);
+			h.addMax(vec);
 		}
 		else
 		{
-			wrapper.addMin(vec);
+			h.addMin(vec);
 		}
-		refreshMinMax();
 	}
-
+	
 	//TODO dirset, to fuse directions.
 	public void expand(Set<Direction> dirSet, int amount)
 	{
@@ -137,22 +99,26 @@ public class Selection implements ISelection
 			expand(d, amount);
 		}
 	}
-
+	
 	public void shrink(Direction dir, int i)
 	{
+		if(h == null)
+		{
+			throw new IllegalStateException("Selection without any point to modify.");
+		}
+		
 		Point vec = dir.getDirectionVector().mul(-i);
 		
 		if(dir.isPositive())
 		{
-			wrapper.addMax(vec);
+			h.addMax(vec);
 		}
 		else
 		{
-			wrapper.addMin(vec);
+			h.addMin(vec);
 		}
-		refreshMinMax();
 	}
-
+	
 	//TODO: fix bug, when shrinking a 2*2 when minimum, that points are swapped.
 	//TODO dirset, to fuse directions.
 	public void shrink(Set<Direction> dirSet, int amount)
@@ -165,6 +131,11 @@ public class Selection implements ISelection
 	
 	public void move(Set<Direction> dirs, int amount)
 	{
+		if(h == null)
+		{
+			throw new IllegalStateException("Selection without any point to modify.");
+		}
+		
 		Point vec = new Point(0, 0, 0);
 		
 		for(Direction d : dirs)
@@ -172,129 +143,134 @@ public class Selection implements ISelection
 			vec = vec.add(d.getDirectionVector());
 		}
 		
-		wrapper.addBoth(vec.mul(amount));
-		refreshMinMax();
+		h.addBoth(vec.mul(amount));
+	}
+
+	//#########################################################################
+	
+	@Override
+	public String getName()
+	{
+		return name;
 	}
 	
-	private class ModificationWrapper
+	@Override
+	public World getWorld()
 	{
-		private final Location p1;
-		private final Location p2;
-		
-		private final boolean x1;
-		private final boolean y1;
-		private final boolean z1;
-		
-		public ModificationWrapper(Location p1, Location p2)
+		return world;
+	}
+	
+	@Override
+	public Point getFirstPoint()
+	{
+		if(h == null)
 		{
-			this.p1 = p1;
-			this.p2 = p2;
-			
-			x1 = p1.getBlockX() > p2.getBlockX();
-			y1 = p1.getBlockY() > p2.getBlockY();
-			z1 = p1.getBlockZ() > p2.getBlockZ();
+			return null;
 		}
 		
-		private int getBigX()
-		{
-			return x1 ? p1.getBlockX() : p2.getBlockX();
-		}
-		
-		private int getBigY()
-		{
-			return y1 ? p1.getBlockY() : p2.getBlockY();
-		}
-		
-		private int getBigZ()
-		{
-			return z1 ? p1.getBlockZ() : p2.getBlockZ();
-		}
-		
-		private int getMinX()
-		{
-			return x1 ? p2.getBlockX() : p1.getBlockX();
-		}
-		
-		private int getMinY()
-		{
-			return y1 ? p2.getBlockY() : p1.getBlockY();
-		}
-		
-		private int getMinZ()
-		{
-			return z1 ? p2.getBlockZ() : p1.getBlockZ();
-		}
-		
-		private void setBigX(int n)
-		{
-			if(x1) p1.setX(n);
-			else   p2.setX(n);
-		}
-		
-		private void setBigY(int n)
-		{
-			if(y1) p1.setY(n);
-			else   p2.setY(n);
-		}
-		
-		private void setBigZ(int n)
-		{
-			if(z1) p1.setZ(n);
-			else   p2.setZ(n);
-		}
-		
-		private void setMinX(int n)
-		{
-			if(x1) p2.setX(n);
-			else   p1.setX(n);
-		}
-		
-		private void setMinY(int n)
-		{
-			if(y1) p2.setY(n);
-			else   p1.setY(n);
-		}
-		
-		private void setMinZ(int n)
-		{
-			if(z1) p2.setZ(n);
-			else   p1.setZ(n);
-		}
-		
-		public void addMax(Point vec)
-		{
-			setBigX(getBigX() + vec.getX());
-			setBigY(getBigY() + vec.getY());
-			setBigZ(getBigZ() + vec.getZ());
-		}
-
-		public void addMin(Point vec)
-		{
-			setMinX(getMinX() + vec.getX());
-			setMinY(getMinY() + vec.getY());
-			setMinZ(getMinZ() + vec.getZ());
-		}
-		
-		public void addBoth(Point vec)
-		{
-			p2.setX(p2.getBlockX() + vec.getX());
-			p2.setY(p2.getBlockY() + vec.getY());
-			p2.setZ(p2.getBlockZ() + vec.getZ());
-			
-			p1.setX(p1.getBlockX() + vec.getX());
-			p1.setY(p1.getBlockY() + vec.getY());
-			p1.setZ(p1.getBlockZ() + vec.getZ());
-		}
-		
-		public Location getMin()
-		{
-			return new Location(p1.getWorld(), getMinX(), getMinY(), getMinZ());
-		}
-		
-		public Location getMax()
-		{
-			return new Location(p1.getWorld(), getBigX(), getBigY(), getBigZ());
-		}
+		return h.getFirstPoint();
 	}
 
+	@Override
+	public Point getSecondPoint()
+	{
+		if(h == null)
+		{
+			return null;
+		}
+		
+		return h.getSecondPoint();
+	}
+	
+	@Override
+	public Location getFirstLocation()
+	{
+		if(h == null)
+		{
+			return null;
+		}
+		
+		Point p = h.getFirstPoint();
+		return new Location(world, p.getX(), p.getY(), p.getZ());
+	}
+	
+	@Override
+	public Location getSecondLocation()
+	{
+		if(h == null)
+		{
+			return null;
+		}
+		
+		Point p = h.getSecondPoint();
+		return new Location(world, p.getX(), p.getY(), p.getZ());
+	}
+
+	@Override
+	public Point getMinPoint()
+	{
+		if(h == null)
+		{
+			return null;
+		}
+		
+		return h.getMinPoint();
+	}
+	
+	@Override
+	public Point getMaxPoint()
+	{
+		if(h == null)
+		{
+			return null;
+		}
+		
+		return h.getMaxPoint();
+	}
+	
+	@Override
+	public Location getMinLocation()
+	{
+		if(h == null)
+		{
+			return null;
+		}
+		
+		Point p = h.getMinPoint();
+		return new Location(world, p.getX(), p.getY(), p.getZ());
+	}
+	
+	@Override
+	public Location getMaxLocation()
+	{
+		if(h == null)
+		{
+			return null;
+		}
+		
+		Point p = h.getMaxPoint();
+		return new Location(world, p.getX(), p.getY(), p.getZ());
+	}
+
+	@Override
+	public Cuboid getCuboid()
+	{
+		if(h == null)
+		{
+			return null;
+		}
+		
+		return new Cuboid(h.getFirstPoint(), h.getSecondPoint());
+	}
+	
+	@Override
+	public Cuboid getMinMaxCuboid()
+	{
+		if(h == null)
+		{
+			return null;
+		}
+		
+		return new Cuboid(h.getMinPoint(), h.getMaxPoint());
+	}
 }

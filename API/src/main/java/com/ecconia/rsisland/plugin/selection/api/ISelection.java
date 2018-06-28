@@ -3,102 +3,123 @@ package com.ecconia.rsisland.plugin.selection.api;
 import java.util.Set;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 
-import com.ecconia.rsisland.framework.commonelements.Area;
+import com.ecconia.rsisland.framework.commonelements.Cuboid;
+import com.ecconia.rsisland.framework.commonelements.Point;
 
-//TODO: Descriptions
-//TODO: Set booleans?
+//TODO: Set booleans? <- Wat?
 public interface ISelection
 {
+	// GETTERS ################################################################
+	
+	/**
+	 * @return String - name of the selection.
+	 */
+	public String getName();
+	
+	/**
+	 * @return World - the World this selection is located in or null if unset
+	 */
+	public World getWorld();
+	
 	/**
 	 * Returns the first point, selected by the player.
 	 * 
-	 * @return location - the first point of the selection
+	 * @return Point - the first point of the selection
 	 */
-	public Location getFirstPoint();
-
+	public Point getFirstPoint();
+	
 	/**
 	 * Returns the second point, selected by the player.
 	 * 
-	 * @return location - the second point of the selection
+	 * @return Point - the first point of the selection
 	 */
-	public Location getSecondPoint();
+	public Point getSecondPoint();
+	
+	/**
+	 * Returns the first point, selected by the player.
+	 * 
+	 * @return Location - the first point of the selection
+	 */
+	public Location getFirstLocation();
+	
+	/**
+	 * Returns the second point, selected by the player.
+	 * 
+	 * @return Location - the first point of the selection
+	 */
+	public Location getSecondLocation();
 	
 	/**
 	 * Returns the min point, of the selection.
 	 * The smaller x, y, z values of first and second point.
 	 * 
-	 * @return location - min point of the selection.
+	 * @return Point - min point of the selection or null if unset
 	 */
-	public Location getMinPoint();
+	public Point getMinPoint();
 	
 	/**
 	 * Returns the max point, of the selection.
 	 * The bigger x, y, z values of first and second point.
 	 * 
-	 * @return location - max point of the selection.
+	 * @return Point - max point of the selection or null if unset
 	 */
-	public Location getMaxPoint();
+	public Point getMaxPoint();
 	
 	/**
-	 * Return the Area, which provides world, min and amx postion.
+	 * Returns the min point, of the selection.
+	 * The smaller x, y, z values of first and second point.
 	 * 
-	 * @return area - the area of the selection
+	 * @return Location - min point of the selection or null if unset
 	 */
-	Area getArea();
+	public Location getMinLocation();
+	
+	/**
+	 * Returns the max point, of the selection.
+	 * The bigger x, y, z values of first and second point.
+	 * 
+	 * @return Location - max point of the selection or null if unset
+	 */
+	public Location getMaxLocation();
 
-	//#########################################################################
+	/**
+	 * @return Cuboid - the Cuboid of this Selection or null if unset
+	 */
+	public Cuboid getCuboid();
 	
 	/**
-	 * 
-	 * @return string - name of the selection.
+	 * @return Cuboid - the Cuboid of this Selection (first point = min; second point = max) or null if unset
 	 */
-	public String getName();
-		
+	public Cuboid getMinMaxCuboid();
+	
+	// SETTERS ################################################################
+	
 	/**
-	 * 
 	 * @param point - first position of the selection.
 	 */
 	public boolean setFirstPoint(Location point);
-
+	
 	/**
-	 * 
 	 * @param point - second position of the selection.
 	 */
 	public boolean setSecondPoint(Location point);
 	
-	//#########################################################################
+	// MODIFIERS ##############################################################
 	
 	/**
-	 * 
-	 * @return boolean - if no point is set.
-	 */
-	public boolean isEmpty();
-	
-	/**
-	 * 
-	 * @return boolean - if a point is not set.
-	 */
-	public boolean isIncomplete();
-	
-	//#########################################################################
-	
-	/**
-	 * 
 	 * @param dirs
 	 * @param amount
 	 */
 	public void move(Set<Direction> dirs, int amount);
 	
 	/**
-	 * 
 	 * @param dirs
 	 * @param amount
 	 */
 	public void expand(Set<Direction> dirs, int amount);
 	
 	/**
-	 * 
 	 * @param dirs
 	 * @param amount
 	 */

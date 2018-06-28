@@ -127,7 +127,7 @@ public class SelPlayer implements ISelPlayer
 		
 		lastEditedSelection = sel;
 		
-		if(sel.isEmpty())
+		if(sel.getWorld() == null)
 		{
 			F.e(player, "Selection %v is empty. Changes not possible.", name);
 			return;
@@ -145,15 +145,15 @@ public class SelPlayer implements ISelPlayer
 			Point vector = dir.getDirectionVector();
 			if(vector.getX() != 0)
 			{
-				shrinkedMax = sel.getFirstPoint().getBlockX() == sel.getSecondPoint().getBlockX();
+				shrinkedMax = sel.getFirstPoint().getX() == sel.getSecondPoint().getX();
 			}
 			else if(vector.getY() != 0)
 			{
-				shrinkedMax = sel.getFirstPoint().getBlockY() == sel.getSecondPoint().getBlockY();
+				shrinkedMax = sel.getFirstPoint().getY() == sel.getSecondPoint().getY();
 			}
 			else if(vector.getZ() != 0)
 			{
-				shrinkedMax = sel.getFirstPoint().getBlockZ() == sel.getSecondPoint().getBlockZ();
+				shrinkedMax = sel.getFirstPoint().getZ() == sel.getSecondPoint().getZ();
 			}
 			
 			if(shrinkedMax)
