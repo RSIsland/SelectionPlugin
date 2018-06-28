@@ -2,17 +2,17 @@ package com.ecconia.rsisland.plugin.selection.api;
 
 import java.util.List;
 
-import com.ecconia.rsisland.framework.commonelements.Point;
+import com.ecconia.rsisland.framework.commonelements.Cuboid;
 
 public class CUIArea
 {
-	private final List<Room> rooms; 
+	private final List<Cuboid> cubiods; 
 	
 	private Color color;
 	
-	public CUIArea(List<Room> rooms)
+	public CUIArea(List<Cuboid> rooms)
 	{
-		this.rooms = rooms;
+		this.cubiods = rooms;
 	}
 	
 	public void setColor(Color color)
@@ -25,11 +25,12 @@ public class CUIArea
 		return color;
 	}
 	
-	public List<Room> getRooms()
+	public List<Cuboid> getCuboids()
 	{
-		return rooms;
+		return cubiods;
 	}
 	
+	//TODO: Outsource
 	public static class Color
 	{
 		private final String bounds;
@@ -76,28 +77,6 @@ public class CUIArea
 		public String getPoint2()
 		{
 			return point2;
-		}
-	}
-	
-	public static class Room
-	{
-		private final Point p1;
-		private final Point p2;
-		
-		public Room(Point p1, Point p2)
-		{
-			this.p1 = p1;
-			this.p2 = p2;
-		}
-		
-		public Point getP1()
-		{
-			return p1;
-		}
-		
-		public Point getP2()
-		{
-			return p2;
 		}
 	}
 	

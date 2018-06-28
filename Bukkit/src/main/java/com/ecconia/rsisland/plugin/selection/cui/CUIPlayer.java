@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
+import com.ecconia.rsisland.framework.commonelements.Cuboid;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
 import com.ecconia.rsisland.plugin.selection.api.CUIArea;
@@ -150,7 +151,7 @@ public class CUIPlayer
 		
 		for(CUIArea selection : selections)
 		{
-			for(CUIArea.Room room : selection.getRooms())
+			for(Cuboid cuboid : selection.getCuboids())
 			{
 				CUIPacketSender builder = new CUIPacketSender(plugin, player);
 				
@@ -158,8 +159,8 @@ public class CUIPlayer
 				builder.setColor(selection.getColor());
 				builder.setGrid(0.0);
 				
-				builder.setPoint(0, room.getP1());
-				builder.setPoint(1, room.getP2());
+				builder.setPoint(0, cuboid.getFirstPoint());
+				builder.setPoint(1, cuboid.getSecondPoint());
 			}
 		}
 	}
