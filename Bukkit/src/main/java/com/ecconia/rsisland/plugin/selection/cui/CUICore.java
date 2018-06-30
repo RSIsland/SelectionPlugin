@@ -15,8 +15,8 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
+import com.ecconia.rsisland.plugin.selection.api.ISelection;
 import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
-import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
 public class CUICore implements Listener, ICUICore
 {
@@ -115,7 +115,7 @@ public class CUICore implements Listener, ICUICore
 //			F.n(plugin.getServer().getConsoleSender(), "Unregistered ", event.getPlayer().getName());
 //		}
 	}
-
+	
 	//#########################################################################
 	
 	public boolean hasCUI(Player player)
@@ -128,7 +128,8 @@ public class CUICore implements Listener, ICUICore
 		return false;
 	}
 	
-	public void createSelection(Player player, Selection selection)
+	@Override
+	public void createSelection(Player player, ISelection selection)
 	{
 		if(hasCUI(player))
 		{
@@ -137,7 +138,8 @@ public class CUICore implements Listener, ICUICore
 		}
 	}
 	
-	public void destroySelection(Player player, Selection selection)
+	@Override
+	public void destroySelection(Player player, ISelection selection)
 	{
 		if(hasCUI(player))
 		{
@@ -146,7 +148,8 @@ public class CUICore implements Listener, ICUICore
 		}
 	}
 	
-	public void updateSelection(Player player, Selection selection)
+	@Override
+	public void updateSelection(Player player, ISelection selection)
 	{
 		if(hasCUI(player))
 		{
@@ -170,11 +173,17 @@ public class CUICore implements Listener, ICUICore
 	}
 	
 	@Override
-	public void replaceSelections(Player player, List<CUICuboidConstruct> areas)
+	public void replaceSelections(Player player, Plugin plugin, List<CUICuboidConstruct> areas)
 	{
 		if(hasCUI(player))
 		{
 			cuiPlayers.get(player).replaceSelections(areas);
 		}
+	}
+	
+	@Override
+	public boolean hasSelections(Player player, Plugin plugin)
+	{
+		return false;
 	}
 }

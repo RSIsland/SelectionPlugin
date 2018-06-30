@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.ecconia.rsisland.plugin.selection.api.ISelection;
 import com.ecconia.rsisland.plugin.selection.api.cui.CUIColor;
-import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
 public class CUISelection
 {
@@ -14,9 +14,9 @@ public class CUISelection
 	private final UUID uuid;
 	private CUIColor color;
 	
-	private final Selection selection;
+	private final ISelection selection;
 	
-	public CUISelection(Plugin plugin, Player player, CUIColor color, Selection selection)
+	public CUISelection(Plugin plugin, Player player, CUIColor color, ISelection selection)
 	{
 		uuid = UUID.randomUUID();
 		builder = new CUIPacketSender(plugin, player);

@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 import com.ecconia.rsisland.framework.commonelements.Cuboid;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
+import com.ecconia.rsisland.plugin.selection.api.ISelection;
 import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
-import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
 public class CUIPlayer
 {
@@ -21,9 +21,7 @@ public class CUIPlayer
 	
 	private boolean delayedVersion;
 	
-	private Map<Selection, CUISelection> selections;
-	
-	//TODO: Add set of all cui-selections
+	private Map<ISelection, CUISelection> selections = new HashMap<>();
 	
 	private SelectionPlugin plugin;
 	private Player player;
@@ -32,8 +30,6 @@ public class CUIPlayer
 	{
 		this.plugin = plugin;
 		this.player = player;
-		
-		selections = new HashMap<>();
 	}
 	
 	public void setVersion(Integer version)
@@ -95,7 +91,8 @@ public class CUIPlayer
 	private void getExistingSelections()
 	{
 		SelPlayer selPlayer = plugin.getIntPlayer(player);
-		for(Selection sel : selPlayer.getSelections())
+		
+		for(ISelection sel : selPlayer.getSelections())
 		{
 			createSelection(sel);
 			updateSelection(sel);
@@ -104,12 +101,12 @@ public class CUIPlayer
 
 	//#########################################################################
 	
-	public void createSelection(Selection selection)
+	public void createSelection(ISelection selection)
 	{
 		getOrCreateCUISelection(selection);
 	}
 
-	public void destroySelection(Selection selection)
+	public void destroySelection(ISelection selection)
 	{
 		CUISelection sel = selections.get(selection);
 		
@@ -120,7 +117,7 @@ public class CUIPlayer
 		}
 	}
 
-	public void updateSelection(Selection selection)
+	public void updateSelection(ISelection selection)
 	{
 		CUISelection sel = getOrCreateCUISelection(selection);
 		if(sel.isVisible())
@@ -129,7 +126,7 @@ public class CUIPlayer
 		}
 	}
 	
-	private CUISelection getOrCreateCUISelection(Selection selection)
+	private CUISelection getOrCreateCUISelection(ISelection selection)
 	{
 		CUISelection sel = selections.get(selection);
 		if(sel == null)
