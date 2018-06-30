@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.ecconia.rsisland.framework.commonelements.Point;
-import com.ecconia.rsisland.plugin.selection.api.CUIArea;
+import com.ecconia.rsisland.plugin.selection.api.cui.CUIColor;
 
 public class CUIPacketSender
 {
@@ -32,11 +32,6 @@ public class CUIPacketSender
 	}
 	
 	public void setColor(CUIColor color)
-	{
-		sendMessage(newMessage(true, CUIPackets.COLOR, color.getBounds(), color.getGrid(), color.getPoint1(), color.getPoint2()));
-	}
-	
-	public void setColor(CUIArea.Color color)
 	{
 		sendMessage(newMessage(true, CUIPackets.COLOR, color.getBounds(), color.getGrid(), color.getPoint1(), color.getPoint2()));
 	}

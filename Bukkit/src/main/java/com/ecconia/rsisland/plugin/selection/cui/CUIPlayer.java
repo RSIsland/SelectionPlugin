@@ -134,7 +134,7 @@ public class CUIPlayer
 		CUISelection sel = selections.get(selection);
 		if(sel == null)
 		{
-			sel = new CUISelection(plugin, player, CUIColor.randomCUIColor(), selection);
+			sel = new CUISelection(plugin, player, CUIColorPreset.randomCUIColor(), selection);
 			selections.put(selection, sel);
 		}
 		return sel;

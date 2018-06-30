@@ -2,8 +2,11 @@ package com.ecconia.rsisland.plugin.selection.cui;
 
 import java.util.Random;
 
-public enum CUIColor
+import com.ecconia.rsisland.plugin.selection.api.cui.CUIColor;
+
+public enum CUIColorPreset
 {
+	//TODO: Corner colors
 	BLACK	("#ffffff", "#000000", "#ff00ff", "#00ffff"),
 	BLUED	("#5555FF", "#0000AA", "#ff00ff", "#00ffff"),
 	GREEND	("#55FF55", "#00AA00", "#ff00ff", "#00ffff"),
@@ -21,43 +24,23 @@ public enum CUIColor
 	YELLOW	("#FFAA00", "#FFFF55", "#ff00ff", "#00ffff"),
 	WHITE	("#000000", "#FFFFFF", "#ff00ff", "#00ffff"),
 	;
-	private final String bounds;
-	private final String grid;
-	private final String point1;
-	private final String point2;
 	
-	CUIColor(String bounds, String grid, String point1, String point2)
+	private final CUIColor color;
+	
+	CUIColorPreset(String bounds, String grid, String point1, String point2)
 	{
-		this.bounds = bounds;
-		this.grid = grid;
-		this.point1 = point1;
-		this.point2 = point2;
+		color = new CUIColor(bounds, grid, point1, point2);
 	}
 	
-	public String getBounds()
+	public CUIColor getColor()
 	{
-		return bounds;
-	}
-	
-	public String getGrid()
-	{
-		return grid;
-	}
-	
-	public String getPoint1()
-	{
-		return point1;
-	}
-	
-	public String getPoint2()
-	{
-		return point2;
+		return color;
 	}
 	
 	public static CUIColor randomCUIColor()
 	{
 		Random r = new Random();
-		return values()[r.nextInt(values().length)];
+		return values()[r.nextInt(values().length)].getColor();
 	}
 	
 	public static String randomColor()

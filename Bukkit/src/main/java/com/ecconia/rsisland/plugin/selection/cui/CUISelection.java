@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.ecconia.rsisland.plugin.selection.api.cui.CUIColor;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
 public class CUISelection
