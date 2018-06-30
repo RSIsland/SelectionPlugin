@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.ecconia.rsisland.plugin.selection.api.CUIArea;
+import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
 public class CUIDummyCore implements ICUICore
@@ -40,7 +40,7 @@ public class CUIDummyCore implements ICUICore
 	}
 
 	@Override
-	public void replaceSelections(Player player, List<CUIArea> areas)
+	public void replaceSelections(Player player, List<CUICuboidConstruct> areas)
 	{
 		//Do nothing
 	}

@@ -15,7 +15,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
-import com.ecconia.rsisland.plugin.selection.api.CUIArea;
+import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
 public class CUICore implements Listener, ICUICore
@@ -30,6 +30,7 @@ public class CUICore implements Listener, ICUICore
 	public CUICore(SelectionPlugin plugin)
 	{
 		this.plugin = plugin;
+		
 		cuiPlayers = new HashMap<>();
 		
 		plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, channel);
@@ -43,6 +44,7 @@ public class CUICore implements Listener, ICUICore
 			public void onPluginMessageReceived(String channel, Player player, byte[] byteMessage)
 			{
 				String message = new String(byteMessage);
+				
 				if(message.startsWith("v|"))
 				{
 					try
@@ -168,7 +170,7 @@ public class CUICore implements Listener, ICUICore
 	}
 	
 	@Override
-	public void replaceSelections(Player player, List<CUIArea> areas)
+	public void replaceSelections(Player player, List<CUICuboidConstruct> areas)
 	{
 		if(hasCUI(player))
 		{

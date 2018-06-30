@@ -9,14 +9,15 @@ import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.ecconia.rsisland.framework.commonelements.Point;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Hand;
-import com.ecconia.rsisland.plugin.selection.api.CUIArea;
 import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelPlayer;
 import com.ecconia.rsisland.plugin.selection.api.ISelection;
+import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
 import com.ecconia.rsisland.plugin.selection.cui.ICUICore;
 import com.ecconia.rsisland.plugin.selection.interfaces.ItemManager;
 
@@ -36,7 +37,7 @@ public class SelPlayer implements ISelPlayer
 		this.player = player;
 		this.cui = cuiCore;
 	}
-
+	
 	public void updatePlayer(Player player)
 	{
 		this.player = player;
@@ -89,12 +90,12 @@ public class SelPlayer implements ISelPlayer
 		
 		return sel;
 	}
-
+	
 	public Set<String> getSelectionNames()
 	{
 		return selections.keySet();
 	}
-
+	
 	//TODO API firendly
 	public void remove(String name)
 	{
@@ -114,7 +115,7 @@ public class SelPlayer implements ISelPlayer
 		selections.remove(name);
 		F.n(player, "Removed selection %v.", name);
 	}
-
+	
 	//TODO direction string
 	public void actionToolClickAir(String name, Direction dir, Hand hand)
 	{
@@ -168,12 +169,12 @@ public class SelPlayer implements ISelPlayer
 		
 		cui.updateSelection(player, sel);
 	}
-
+	
 	public Collection<Selection> getSelections()
 	{
 		return selections.values();
 	}
-
+	
 	/**
 	 * Warning: throws InvalidNameException
 	 * @return
@@ -192,7 +193,7 @@ public class SelPlayer implements ISelPlayer
 		}
 		return null;
 	}
-
+	
 	public void update(Selection selection)
 	{
 		//TODO: OHNONONOO this is a cancer call! Put it somewhere else!!!
@@ -200,7 +201,6 @@ public class SelPlayer implements ISelPlayer
 		cui.updateSelection(player, selection);
 	}
 	
-
 	public void use(String name)
 	{
 		Selection selection = getSelection(name);
@@ -214,7 +214,6 @@ public class SelPlayer implements ISelPlayer
 		
 		F.n(player, "Set %v active.", name);
 	}
-
 	
 	@Override
 	public ISelection getSelectionOrCurrent(String name)
@@ -226,7 +225,7 @@ public class SelPlayer implements ISelPlayer
 		}
 		return (ISelection) selection;
 	}
-
+	
 	@Override
 	public boolean hasCUI()
 	{
@@ -234,8 +233,16 @@ public class SelPlayer implements ISelPlayer
 	}
 	
 	@Override
-	public void setCUIAreas(List<CUIArea> areas)
+	public void setCUIAreas(Plugin plugin, List<CUICuboidConstruct> areas)
 	{
+		//TODO
 		cui.replaceSelections(player, areas);
+	}
+	
+	@Override
+	public boolean hasCuboidConstructs(Plugin plugin)
+	{
+		//TODO
+		return false;
 	}
 }

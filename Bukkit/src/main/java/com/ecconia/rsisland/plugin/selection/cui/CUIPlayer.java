@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import com.ecconia.rsisland.framework.commonelements.Cuboid;
 import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
-import com.ecconia.rsisland.plugin.selection.api.CUIArea;
+import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
@@ -140,7 +140,7 @@ public class CUIPlayer
 		return sel;
 	}
 	
-	public void replaceSelections(List<CUIArea> selections)
+	public void replaceSelections(List<CUICuboidConstruct> selections)
 	{
 		for(CUISelection selection : this.selections.values())
 		{
@@ -149,7 +149,7 @@ public class CUIPlayer
 		
 		this.selections.clear();
 		
-		for(CUIArea selection : selections)
+		for(CUICuboidConstruct selection : selections)
 		{
 			for(Cuboid cuboid : selection.getCuboids())
 			{
