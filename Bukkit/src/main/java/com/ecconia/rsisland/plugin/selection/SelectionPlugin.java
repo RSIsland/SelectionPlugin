@@ -66,13 +66,11 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 		new CommandHandler(this, new Feedback(prefix), new GroupSubcommand("sel"
 			,new GiveTool()
 			,new GroupSubcommand("manage"
-				,new CommandRemove(this)
-			)
+				,new CommandRemove(this))
 			,new GroupSubcommand("edit"
 				,new CommandExpand(this)
 				,new CommandShrink(this)
-				,new CommandMove(this)
-			)
+				,new CommandMove(this))
 			,new CommandCUI(cuiCore)
 			,new CommandUse(this)
 		));
@@ -88,7 +86,6 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 	public void actionToolClickBlock(Player player, String name, Hand hand, Location location, BlockFace blockFace)
 	{
 		//player.sendMessage(prefix + ChatColor.GRAY + "You set the " + ChatColor.GOLD + (hand.isFirstPos() ? "first" : "second") + ChatColor.GRAY + " position of your selection " + ChatColor.GOLD + name + ChatColor.GRAY + " to " + ChatColor.GOLD + target.getBlockX() + ", " + target.getBlockY() + ", " + target.getBlockZ() + ChatColor.GRAY + ".");
-		
 		SelPlayer splayer = getIntPlayer(player);
 		
 		splayer.actionToolClickBlock(name, hand, location, blockFace);

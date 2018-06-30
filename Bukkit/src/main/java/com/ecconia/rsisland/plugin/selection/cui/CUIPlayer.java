@@ -36,13 +36,13 @@ public class CUIPlayer
 	{
 		if(this.version != null && !this.version.equals(version))
 		{
-			F.e(player.getServer().getConsoleSender(), "Player %v send a different version %v than the one he sent before %v, nag him!", player.getName(), version, this.version);
+			F.e(player.getServer().getConsoleSender(), "Player %v send a different CUI version %v than the one he sent already %v, ask him!", player.getName(), version, this.version);
 		}
 		this.version = version;
 		
 		if(version > CUICore.requiredVersion)
 		{
-			F.e(player.getServer().getConsoleSender(), "Player %v uses a newer CUI protocol version: %v Please nag developer to update this plugin.", player.getName(), version);
+			F.e(player.getServer().getConsoleSender(), "Player %v uses a newer CUI protocol version: %v. Please nag developer to update this plugin.", player.getName(), version);
 		}
 		
 		if(delayedVersion)

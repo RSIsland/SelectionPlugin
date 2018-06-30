@@ -60,14 +60,13 @@ public class CUICore implements Listener, ICUICore
 					{
 					}
 				}
-				//Some wrong format:
-				F.e(plugin.getServer().getConsoleSender(), "Unknown CUI packet from %v: %v", player.getName(), message);
+				//Some unknown format:
+				F.e(plugin.getServer().getConsoleSender(), "Unknown CUI packet from %v: %v. Please report to the plugin author.", player.getName(), message);
 			}
 		});
 		
 		//Check if WE is on the server, else catch the "/we cui" command silently.
-		Plugin wePlugin = plugin.getServer().getPluginManager().getPlugin("WorldEdit");
-		if(wePlugin == null)
+		if(plugin.getServer().getPluginManager().getPlugin("WorldEdit") == null)
 		{
 			plugin.getServer().getPluginManager().registerEvents(new KillCommandWECUI(), plugin);
 		}
