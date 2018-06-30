@@ -32,7 +32,12 @@ public class CommandRemove extends Subcommand
 	{
 		checkPermission(sender);
 		
-		SelPlayer player = plugin.getIntPlayer(getPlayer(sender));
+		SelPlayer selPlayer = plugin.getIntPlayer(getPlayer(sender));
+		
+		if(selPlayer == null)
+		{
+			die("You do not have any selection.");
+		}
 		
 		String selection = null;
 		
@@ -44,7 +49,7 @@ public class CommandRemove extends Subcommand
 		{
 			try
 			{
-				selection = player.getLastSelectionName();
+				selection = selPlayer.getLastSelectionName();
 			}
 			catch (InvalidNameException e)
 			{
@@ -59,19 +64,24 @@ public class CommandRemove extends Subcommand
 			return;
 		}
 		
-		player.remove(selection);
+		selPlayer.remove(selection);
 	}
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, String[] args)
 	{
-		if (args.length == 1)
+		if(args.length == 1)
 		{
 			SelPlayer player = plugin.getIntPlayer((Player) sender);
-			List<String> selections = player.getSelectionNames().stream().filter(name -> StringUtil.startsWithIgnoreCase(name, args[0])).collect(Collectors.toList());
 			
-			return selections;
+			if(player == null)
+			{
+				return Collections.emptyList();
+			}
+			
+			return player.getSelectionNames().stream().filter(name -> StringUtil.startsWithIgnoreCase(name, args[0])).collect(Collectors.toList());
 		}
+		
 		return Collections.emptyList();
 	}
 }

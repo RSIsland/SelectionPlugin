@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
+import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
 
 public class LeaveJoinListener implements Listener
 {
@@ -20,13 +21,23 @@ public class LeaveJoinListener implements Listener
 	@EventHandler
 	public void onLeave(PlayerQuitEvent event)
 	{
-		plugin.updatePlayer(event.getPlayer().getUniqueId(), null);
+		SelPlayer sPlayer = plugin.getIntPlayer(event.getPlayer());
+		
+		if(sPlayer != null)
+		{
+			sPlayer.updatePlayer(null);
+		}
 	}
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event)
 	{
 		Player player = event.getPlayer();
-		plugin.updatePlayer(player.getUniqueId(), player);
+		SelPlayer sPlayer = plugin.getIntPlayer(player);
+		
+		if(sPlayer != null)
+		{
+			sPlayer.updatePlayer(player);
+		}
 	}
 }

@@ -43,7 +43,7 @@ public class ToolUsageListener implements Listener
 						Hand hand = event.getAction() == Action.LEFT_CLICK_AIR ? Hand.LEFT : Hand.RIGHT;
 						Direction dir = Direction.getDirectionFromHead(player.getLocation());
 						
-						plugin.actionToolClickAir(player, name, dir, hand);
+						plugin.getOrCreateIntPlayer(player).actionToolClickAir(name, dir, hand);
 					}
 					else
 					{
@@ -55,7 +55,7 @@ public class ToolUsageListener implements Listener
 	//						target = block.getLocation().add(face.getModX(), face.getModY(), face.getModZ());
 	//					}
 						
-						plugin.actionToolClickBlock(player, name, hand, block.getLocation(), event.getBlockFace());
+						plugin.getOrCreateIntPlayer(player).actionToolClickBlock(name, hand, block.getLocation(), event.getBlockFace());
 					}
 				}
 				else

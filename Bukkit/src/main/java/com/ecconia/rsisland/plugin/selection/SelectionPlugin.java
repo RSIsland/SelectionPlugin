@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.ecconia.rsisland.framework.cofami.CommandHandler;
 import com.ecconia.rsisland.framework.cofami.Feedback;
 import com.ecconia.rsisland.framework.cofami.GroupSubcommand;
-import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelPlayer;
 import com.ecconia.rsisland.plugin.selection.api.SelectionAPI;
 import com.ecconia.rsisland.plugin.selection.commands.CommandCUI;
@@ -75,23 +72,8 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 			,new CommandUse(this)
 		));
 	}
-
-	public void actionToolClickAir(Player player, String name, Direction dir, Hand hand)
-	{
-		SelPlayer splayer = getIntPlayer(player);
-		
-		splayer.actionToolClickAir(name, dir, hand);
-	}
-
-	public void actionToolClickBlock(Player player, String name, Hand hand, Location location, BlockFace blockFace)
-	{
-		//player.sendMessage(prefix + ChatColor.GRAY + "You set the " + ChatColor.GOLD + (hand.isFirstPos() ? "first" : "second") + ChatColor.GRAY + " position of your selection " + ChatColor.GOLD + name + ChatColor.GRAY + " to " + ChatColor.GOLD + target.getBlockX() + ", " + target.getBlockY() + ", " + target.getBlockZ() + ChatColor.GRAY + ".");
-		SelPlayer splayer = getIntPlayer(player);
-		
-		splayer.actionToolClickBlock(name, hand, location, blockFace);
-	}
 	
-	public SelPlayer getIntPlayer(Player player)
+	public SelPlayer getOrCreateIntPlayer(Player player)
 	{
 		SelPlayer selPlayer = players.get(player.getUniqueId());
 		
@@ -104,20 +86,16 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 		return selPlayer;
 	}
 	
-	//Updates the SelPlayer object if existing on join/leave.
-	public void updatePlayer(UUID uuid, Player player)
+	public SelPlayer getIntPlayer(Player player)
 	{
-		SelPlayer selPlayer = players.get(uuid);
-		
-		if(selPlayer != null)
-		{
-			selPlayer.updatePlayer(player);
-		}
+		return players.get(player.getUniqueId());
 	}
+	
+	// API ####################################################################
 	
 	@Override
 	public ISelPlayer getPlayer(Player player)
 	{
-		return (ISelPlayer) getIntPlayer(player);
+		return (ISelPlayer) getOrCreateIntPlayer(player);
 	}
 }

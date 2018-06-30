@@ -26,8 +26,12 @@ public class CommandUse extends Subcommand
 	@Override
 	public void exec(CommandSender sender, String[] args)
 	{
-		Player player = getPlayer(sender);
-		SelPlayer selPlayer = plugin.getIntPlayer(player);
+		SelPlayer selPlayer = plugin.getIntPlayer(getPlayer(sender));
+		
+		if(selPlayer == null)
+		{
+			die("Please make a selection first.");
+		}
 		
 		if(args.length == 1)
 		{
@@ -35,20 +39,25 @@ public class CommandUse extends Subcommand
 		}
 		else
 		{
-			F.e(player, "Usage: /sel use <selectionName>");
+			F.e(sender, "Usage: /sel use <selectionName>");
 		}
 	}
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, String[] args)
 	{
-		if (args.length == 1)
+		if(args.length == 1)
 		{
 			SelPlayer player = plugin.getIntPlayer((Player) sender);
-			List<String> selections = player.getSelectionNames().stream().filter(name -> StringUtil.startsWithIgnoreCase(name, args[0])).collect(Collectors.toList());
 			
-			return selections;
+			if(player == null)
+			{
+				return Collections.emptyList();
+			}
+			
+			return player.getSelectionNames().stream().filter(name -> StringUtil.startsWithIgnoreCase(name, args[0])).collect(Collectors.toList());
 		}
+		
 		return Collections.emptyList();
 	}
 }

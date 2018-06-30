@@ -39,6 +39,11 @@ public class CommandExpand extends Subcommand
 		Player player = getPlayer(sender);
 		SelPlayer selPlayer = plugin.getIntPlayer(player);
 		
+		if(selPlayer == null)
+		{
+			die("Please make a selection first.");
+		}
+		
 		int params = args.length;
 		
 		Integer amount = null;
@@ -146,13 +151,18 @@ public class CommandExpand extends Subcommand
 	@Override
 	public List<String> onTabComplete(CommandSender sender, String[] args)
 	{
-		if (args.length == 1)
+		if(args.length == 1)
 		{
 			SelPlayer player = plugin.getIntPlayer((Player) sender);
-			List<String> selections = player.getSelectionNames().stream().filter(name -> StringUtil.startsWithIgnoreCase(name, args[0])).collect(Collectors.toList());
 			
-			return selections;
+			if(player == null)
+			{
+				return Collections.emptyList();
+			}
+			
+			return player.getSelectionNames().stream().filter(name -> StringUtil.startsWithIgnoreCase(name, args[0])).collect(Collectors.toList());
 		}
+		
 		return Collections.emptyList();
 	}
 }
