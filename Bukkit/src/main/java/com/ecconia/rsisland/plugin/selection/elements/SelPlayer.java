@@ -25,15 +25,13 @@ public class SelPlayer implements ISelPlayer
 {
 	private Player player;
 	
-	private Map<String, Selection> selections;
+	private Map<String, Selection> selections = new HashMap<>();
 	private ICUICore cui;
 	
 	private Selection lastEditedSelection;
 	
 	public SelPlayer(Player player, ICUICore cuiCore)
 	{
-		selections = new HashMap<>();
-		
 		this.player = player;
 		this.cui = cuiCore;
 	}
@@ -215,6 +213,8 @@ public class SelPlayer implements ISelPlayer
 		F.n(player, "Set %v active.", name);
 	}
 	
+	// API ####################################################################
+	
 	@Override
 	public ISelection getSelectionOrCurrent(String name)
 	{
@@ -226,6 +226,8 @@ public class SelPlayer implements ISelPlayer
 		return (ISelection) selection;
 	}
 	
+	// CUI-API ################################################################
+	
 	@Override
 	public boolean hasCUI()
 	{
@@ -235,14 +237,12 @@ public class SelPlayer implements ISelPlayer
 	@Override
 	public void setCUIAreas(Plugin plugin, List<CUICuboidConstruct> areas)
 	{
-		//TODO
-		cui.replaceSelections(player, areas);
+		cui.replaceSelections(player, plugin, areas);
 	}
 	
 	@Override
 	public boolean hasCuboidConstructs(Plugin plugin)
 	{
-		//TODO
-		return false;
+		return cui.hasSelections(player, plugin);
 	}
 }

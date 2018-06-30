@@ -3,21 +3,31 @@ package com.ecconia.rsisland.plugin.selection.cui;
 import java.util.List;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
+import com.ecconia.rsisland.plugin.selection.api.ISelection;
 import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
-import com.ecconia.rsisland.plugin.selection.elements.Selection;
 
 public interface ICUICore
 {
-	public void createSelection(Player player, Selection selection);
+	// Internal-Triggered #####################################################
+	//Default to the SelectionPlugin plugin
 	
-	public void destroySelection(Player player, Selection selection);
+	public void createSelection(Player player, ISelection selection);
 	
-	public void updateSelection(Player player, Selection selection);
+	public void destroySelection(Player player, ISelection selection);
+	
+	public void updateSelection(Player player, ISelection selection);
 	
 	public void forceEnable(Player player);
 	
+	// Both-Triggered #########################################################
+	
 	public boolean cuiEnabled(Player player);
-
-	public void replaceSelections(Player player, List<CUICuboidConstruct> areas);
+	
+	// API-Triggered ##########################################################
+	
+	public void replaceSelections(Player player, Plugin plugin, List<CUICuboidConstruct> areas);
+	
+	public boolean hasSelections(Player player, Plugin plugin);
 }
