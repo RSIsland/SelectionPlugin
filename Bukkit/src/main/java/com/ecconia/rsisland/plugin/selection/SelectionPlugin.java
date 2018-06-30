@@ -94,14 +94,27 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 	public SelPlayer getIntPlayer(Player player)
 	{
 		SelPlayer selPlayer = players.get(player.getUniqueId());
+		
 		if(selPlayer == null)
 		{
 			selPlayer = new SelPlayer(player, cuiCore);
 			players.put(player.getUniqueId(), selPlayer);
 		}
+		
 		return selPlayer;
 	}
-
+	
+	//Updates the SelPlayer object if existing on join/leave.
+	public void updatePlayer(UUID uuid, Player player)
+	{
+		SelPlayer selPlayer = players.get(uuid);
+		
+		if(selPlayer != null)
+		{
+			selPlayer.updatePlayer(player);
+		}
+	}
+	
 	@Override
 	public ISelPlayer getPlayer(Player player)
 	{
