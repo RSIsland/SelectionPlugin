@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 
 import com.ecconia.rsisland.framework.commonelements.Cuboid;
-import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
 import com.ecconia.rsisland.plugin.selection.api.ISelection;
 import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
@@ -36,13 +35,13 @@ public class CUIPlayer
 	{
 		if(this.version != null && !this.version.equals(version))
 		{
-			F.e(player.getServer().getConsoleSender(), "Player %v send a different CUI version %v than the one he sent already %v, ask him!", player.getName(), version, this.version);
+			plugin.logger().error("Player %v send a different CUI version %v than the one he sent already %v, ask him!", player.getName(), version, this.version);
 		}
 		this.version = version;
 		
 		if(version > CUICore.requiredVersion)
 		{
-			F.e(player.getServer().getConsoleSender(), "Player %v uses a newer CUI protocol version: %v. Please nag developer to update this plugin.", player.getName(), version);
+			plugin.logger().error("Player %v uses a newer CUI protocol version: %v. Please nag developer to update this plugin.", player.getName(), version);
 		}
 		
 		if(delayedVersion)
@@ -56,7 +55,7 @@ public class CUIPlayer
 	{
 		if(version < CUICore.requiredVersion)
 		{
-			F.e(player, "Your CUI is outdated, protocol version %v. Please update it, to enjoy multi selections on this server.", version);
+			plugin.logger().f().e(player, "Your CUI is outdated, protocol version %v. Please update it, to enjoy multi selections on this server.", version);
 			enabled = false;
 		}
 	}

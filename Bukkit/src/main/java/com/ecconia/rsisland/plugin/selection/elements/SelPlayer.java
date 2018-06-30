@@ -11,8 +11,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.ecconia.rsisland.framework.cofami.Feedback;
+import com.ecconia.rsisland.framework.cofami.exceptions.CommandException;
 import com.ecconia.rsisland.framework.commonelements.Point;
-import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Hand;
 import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.api.ISelPlayer;
@@ -24,16 +25,18 @@ import com.ecconia.rsisland.plugin.selection.interfaces.ItemManager;
 public class SelPlayer implements ISelPlayer
 {
 	private Player player;
+	private final Feedback f;
 	
 	private Map<String, Selection> selections = new HashMap<>();
 	private ICUICore cui;
 	
 	private Selection lastEditedSelection;
 	
-	public SelPlayer(Player player, ICUICore cuiCore)
+	public SelPlayer(Player player, ICUICore cuiCore, Feedback f)
 	{
 		this.player = player;
 		this.cui = cuiCore;
+		this.f = f;
 	}
 	
 	public void updatePlayer(Player player)
@@ -47,7 +50,7 @@ public class SelPlayer implements ISelPlayer
 		if(sel == null)
 		{
 			sel = generateSelection(name);
-			F.n(player, "New selection %v created.", name);
+			f.n(player, "New selection %v created.", name);
 		}
 		
 		lastEditedSelection = sel;
@@ -64,11 +67,11 @@ public class SelPlayer implements ISelPlayer
 		
 		if(overwroteBoth)
 		{
-			F.n(player, "First and second point set for selection %v.", name);
+			f.n(player, "First and second point set for selection %v.", name);
 		}
 		else
 		{
-			F.n(player, (hand.isFirstPos() ? "First" : "Second") + " point set for selection %v.", name);
+			f.n(player, (hand.isFirstPos() ? "First" : "Second") + " point set for selection %v.", name);
 		}
 		
 		cui.updateSelection(player, sel);
@@ -100,8 +103,7 @@ public class SelPlayer implements ISelPlayer
 		Selection selection = getSelection(name);
 		if(selection == null)
 		{
-			F.e(player, "You do not have a selection %v.", name);
-			return;
+			throw new CommandException("You do not have a selection %v.", name);
 		}
 		
 		if(lastEditedSelection == selection)
@@ -111,7 +113,6 @@ public class SelPlayer implements ISelPlayer
 		
 		cui.destroySelection(player, selection);
 		selections.remove(name);
-		F.n(player, "Removed selection %v.", name);
 	}
 	
 	//TODO direction string
@@ -120,7 +121,7 @@ public class SelPlayer implements ISelPlayer
 		Selection sel = getSelection(name);
 		if(sel == null)
 		{
-			F.e(player, "Selection %v does not exist. Changes not possible.", name);
+			f.e(player, "Selection %v does not exist. Changes not possible.", name);
 			return;
 		}
 		
@@ -128,20 +129,21 @@ public class SelPlayer implements ISelPlayer
 		
 		if(sel.getWorld() == null)
 		{
-			F.e(player, "Selection %v is empty. Changes not possible.", name);
+			f.e(player, "Selection %v is empty. Changes not possible.", name);
 			return;
 		}
 		
 		if(hand.grows())
 		{
 			sel.expand(dir, 1);
-			F.n(player, "Expanded selection %v by 1.", sel.getName());
+			f.n(player, "Expanded selection %v by 1.", sel.getName());
 		}
 		else
 		{
 			boolean shrinkedMax = false;
 			
 			Point vector = dir.getDirectionVector();
+			
 			if(vector.getX() != 0)
 			{
 				shrinkedMax = sel.getFirstPoint().getX() == sel.getSecondPoint().getX();
@@ -157,12 +159,12 @@ public class SelPlayer implements ISelPlayer
 			
 			if(shrinkedMax)
 			{
-				F.n(player, "Cannot shrink selection %v anymore.", sel.getName());
+				f.n(player, "Cannot shrink selection %v anymore.", sel.getName());
 				return;
 			}
 			
 			sel.shrink(dir, 1);
-			F.n(player, "Shrinked selection %v by 1.", sel.getName());
+			f.n(player, "Shrinked selection %v by 1.", sel.getName());
 		}
 		
 		cui.updateSelection(player, sel);
@@ -180,6 +182,7 @@ public class SelPlayer implements ISelPlayer
 	public String getLastSelectionName()
 	{
 		String name = ItemManager.checkPlayerHandForTool(player);
+		
 		if(name != null)
 		{
 			return name;
@@ -189,6 +192,7 @@ public class SelPlayer implements ISelPlayer
 		{
 			return lastEditedSelection.getName();
 		}
+		
 		return null;
 	}
 	
@@ -202,15 +206,13 @@ public class SelPlayer implements ISelPlayer
 	public void use(String name)
 	{
 		Selection selection = getSelection(name);
+		
 		if(selection == null)
 		{
-			F.e(player, "You do not have a selection %v.", name);
-			return;
+			new CommandException("You do not have a selection %v.", name);
 		}
 		
 		lastEditedSelection = selection;
-		
-		F.n(player, "Set %v active.", name);
 	}
 	
 	// API ####################################################################
@@ -219,10 +221,12 @@ public class SelPlayer implements ISelPlayer
 	public ISelection getSelectionOrCurrent(String name)
 	{
 		Selection selection = getSelection(name);
+		
 		if(selection == null)
 		{
 			selection = lastEditedSelection;
 		}
+		
 		return (ISelection) selection;
 	}
 	

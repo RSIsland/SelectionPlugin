@@ -40,12 +40,12 @@ public class Parsers
 			Direction dirForChar = Direction.getDirectionFromChar(c, head);
 			if(dirForChar == null)
 			{
-				throw new ParseException(F.e("Char %v cannot be parsed to a direction.", c));
+				throw new ParseException("Char %v cannot be parsed to a direction.", c);
 			}
 			
 			if(!dirs.add(dirForChar))
 			{
-				throw new ParseException(F.e("The direction %v for character %v is duplicated.", dirForChar, c));
+				throw new ParseException("The direction %v for character %v is duplicated.", dirForChar, c);
 			}
 		}
 		

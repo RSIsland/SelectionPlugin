@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.ecconia.rsisland.framework.cofami.Subcommand;
-import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
 import com.ecconia.rsisland.plugin.selection.interfaces.ItemManager;
 
@@ -21,21 +20,21 @@ public class GiveTool extends Subcommand
 	@Override
 	public void exec(CommandSender sender, String[] args)
 	{
+		checkPermission(sender);
+		
 		if(!(sender instanceof Player))
 		{
-			F.e(sender, "Only player can use this command, to get an item.");
-			return;
+			die("Only player can use this command, to get an item.");
 		}
 		
 		String selectionName = args.length > 0 ? StringUtils.join(args, "") : "default";
 		
 		if(!selectionName.matches(SelectionPlugin.itemNameFormat))
 		{
-			F.e(sender, "Invalid name format %v.", selectionName);
-			return;
+			die("Invalid name format %v.", selectionName);
 		}
 		
 		ItemManager.giveItem((Player) sender, Material.BLAZE_ROD, selectionName);
-		F.n(sender, "There ya go, for selection \"%v\".", selectionName);
+		f.n(sender, "There ya go, for selection \"%v\".", selectionName);
 	}
 }

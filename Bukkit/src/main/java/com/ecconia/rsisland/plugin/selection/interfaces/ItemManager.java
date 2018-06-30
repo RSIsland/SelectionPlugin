@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
 import com.ecconia.rsisland.plugin.selection.exceptions.InvalidNameException;
 
@@ -37,7 +36,7 @@ public class ItemManager
 				{
 					return name;
 				}
-				throw new InvalidNameException(F.e("Invalid name \"%v\", please destroy item.", name));
+				throw new InvalidNameException("Invalid name \"%v\", please destroy item.", name);
 			}
 		}
 		

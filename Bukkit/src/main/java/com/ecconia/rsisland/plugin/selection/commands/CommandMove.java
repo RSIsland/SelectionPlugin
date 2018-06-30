@@ -11,14 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import com.ecconia.rsisland.framework.cofami.Subcommand;
-import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.Parsers;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
 import com.ecconia.rsisland.plugin.selection.api.Direction;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
 import com.ecconia.rsisland.plugin.selection.elements.Selection;
-import com.ecconia.rsisland.plugin.selection.exceptions.InvalidNameException;
-import com.ecconia.rsisland.plugin.selection.exceptions.ParseException;
 
 public class CommandMove extends Subcommand
 {
@@ -51,97 +48,83 @@ public class CommandMove extends Subcommand
 		Direction head = Direction.getDirectionFromHead(player.getLocation());
 		String selectionName;
 		
-		try
+		if(params == 3)
 		{
-			if(params == 3)
+			selectionName = args[0];
+			args[0] = args[1];
+			args[1] = args[2];
+			params = 2;
+		}
+		else
+		{
+			selectionName = selPlayer.getLastSelectionName();
+			
+			if(selectionName == null)
 			{
-				selectionName = args[0];
-				args[0] = args[1];
-				args[1] = args[2];
-				params = 2;
+				die("No latest used selection. Use: /sel use <name>");
 			}
-			else
+		}
+		
+		if(params == 1)
+		{
+			amount = Parsers.parseInt(args[0]);
+			
+			if(amount == null)
 			{
-				try
-				{
-					selectionName = selPlayer.getLastSelectionName();
-				}
-				catch (InvalidNameException e)
-				{
-					player.sendMessage(e.getMessage());
-					return;
-				}
-				if(selectionName == null)
-				{
-					F.e(player, "No latest used selection. Use: /sel use <name>");
-					return;
-				}
+				die("Could not parse amount %v.", args[0]);
 			}
 			
-			if(params == 1)
+			dirs = Arrays.stream(new Direction[]{head}).collect(Collectors.toSet());
+		}
+		else if(params == 2)
+		{
+			String dirsInput = null;
+			amount = Parsers.parseInt(args[0]);
+			
+			if(amount == null)
 			{
-				amount = Parsers.parseInt(args[0]);
+				amount = Parsers.parseInt(args[1]);
+				
 				if(amount == null)
 				{
-					F.e(player, "Could not parse amount %v.", args[0]);
-					return;
-				}
-				dirs = Arrays.stream(new Direction[]{head}).collect(Collectors.toSet());
-			}
-			else if(params == 2)
-			{
-				String dirsInput;
-				amount = Parsers.parseInt(args[0]);
-				if(amount == null)
-				{
-					amount = Parsers.parseInt(args[1]);
-					if(amount == null)
-					{
-						F.e(player, "Neither %v nor %v can be parsed to an amount.", args[0], args[1]);
-						return;
-					}
-					else
-					{
-						dirsInput = args[0];
-					}
+					die("Neither %v nor %v can be parsed to an amount.", args[0], args[1]);
 				}
 				else
 				{
-					dirsInput = args[1];
+					dirsInput = args[0];
 				}
-				if(dirsInput.equals("a"))
-				{
-					F.e(player, "Moved in all directions, done. :/");
-					return;
-				}
-				dirs = Parsers.parseDirection(dirsInput, head);
 			}
 			else
 			{
-				F.e(player, "Usage: /sel edit move <amount> [dirs] OR /sel edit move <name> <amount> <dirs>");
-				return;
+				dirsInput = args[1];
 			}
+			
+			if(dirsInput.equals("a"))
+			{
+				die("Moved in all directions, done. :/");
+			}
+			
+			dirs = Parsers.parseDirection(dirsInput, head);
 		}
-		catch (ParseException e)
+		else
 		{
-			player.sendMessage(e.getMessage());
-			return;
+			die("Usage: /sel edit move <amount> [dirs] OR /sel edit move <name> <amount> <dirs>");
 		}
 		
 		Selection selection = selPlayer.getSelection(selectionName);
+		
 		if(selection == null)
 		{
-			F.e(player, "You do not have a selection %v.", selectionName);
-			return;
+			die("You do not have a selection %v.", selectionName);
 		}
 		
 		for(Direction d : dirs)
 		{
 			Direction op = Direction.getOppositeDirection(d);
+			
 			if(dirs.contains(op))
 			{
-				F.e(player, "Direction %v and %v are opposite to each other.", d, op);
-				return;
+				die("Direction %v and %v are opposite to each other.", d, op);
 			}
 		}
 		
@@ -156,7 +139,7 @@ public class CommandMove extends Subcommand
 		selPlayer.update(selection);
 		
 		//TODO: Details
-		F.n(player, "Moved your selection.");
+		f.n(player, "Moved your selection.");
 	}
 	
 	@Override

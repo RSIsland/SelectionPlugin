@@ -9,10 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import com.ecconia.rsisland.framework.cofami.Subcommand;
-import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
 import com.ecconia.rsisland.plugin.selection.elements.SelPlayer;
-import com.ecconia.rsisland.plugin.selection.exceptions.InvalidNameException;
 
 public class CommandRemove extends Subcommand
 {
@@ -22,7 +20,6 @@ public class CommandRemove extends Subcommand
 	public CommandRemove(SelectionPlugin plugin)
 	{
 		super("remove");
-		
 		this.plugin = plugin;
 		onlyPlayer();
 	}
@@ -39,7 +36,7 @@ public class CommandRemove extends Subcommand
 			die("You do not have any selection.");
 		}
 		
-		String selection = null;
+		String selection;
 		
 		if(args.length == 1)
 		{	
@@ -47,24 +44,16 @@ public class CommandRemove extends Subcommand
 		}
 		else
 		{
-			try
-			{
-				selection = selPlayer.getLastSelectionName();
-			}
-			catch (InvalidNameException e)
-			{
-				sender.sendMessage(e.getMessage());
-				return;
-			}
+			selection = selPlayer.getLastSelectionName();
 		}
 		
 		if(selection == null)
 		{
-			F.e(sender, "No latest selection. Add <selectionName> argument.");
-			return;
+			die("No latest selection. Add <selectionName> argument.");
 		}
 		
 		selPlayer.remove(selection);
+		f.n(sender, "Removed selection %v.", name);
 	}
 	
 	@Override

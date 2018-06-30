@@ -29,12 +29,13 @@ import com.ecconia.rsisland.plugin.selection.interfaces.ToolUsageListener;
 
 public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 {
-	public static final String prefix = ChatColor.WHITE + "[" + ChatColor.GOLD + "Select" + ChatColor.WHITE + "] ";
 	public static final String itemName = "SelectionTool: ";
 	public static final String itemNameFormat = "[a-zA-Z0-9:-_]+";
 	
 	private Map<UUID, SelPlayer> players = new HashMap<>();
 	private ICUICore cuiCore;
+	
+	private FormattedLogger logger;
 	
 	@Override
 	public void onLoad()
@@ -50,6 +51,8 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 //		cuiCore = true ? new CUICore(this) : new CUIDummyCore();
 		cuiCore = new CUICore(this);
 		
+		logger = new FormattedLogger(new Feedback(Feedback.simplePrefix(ChatColor.WHITE, ChatColor.GOLD, "Select")), getServer().getConsoleSender());
+		
 		getServer().getPluginManager().registerEvents(new ToolUsageListener(this), this);
 		getServer().getPluginManager().registerEvents(new LeaveJoinListener(this), this);
 		
@@ -60,7 +63,7 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 	
 	private void initCommands()
 	{
-		new CommandHandler(this, new Feedback(prefix), new GroupSubcommand("sel"
+		new CommandHandler(this, logger.f(), new GroupSubcommand("sel"
 			,new GiveTool()
 			,new GroupSubcommand("manage"
 				,new CommandRemove(this))
@@ -79,7 +82,7 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 		
 		if(selPlayer == null)
 		{
-			selPlayer = new SelPlayer(player, cuiCore);
+			selPlayer = new SelPlayer(player, cuiCore, logger.f());
 			players.put(player.getUniqueId(), selPlayer);
 		}
 		
@@ -89,6 +92,11 @@ public class SelectionPlugin extends JavaPlugin implements SelectionAPI
 	public SelPlayer getIntPlayer(Player player)
 	{
 		return players.get(player.getUniqueId());
+	}
+	
+	public FormattedLogger logger()
+	{
+		return logger;
 	}
 	
 	// API ####################################################################

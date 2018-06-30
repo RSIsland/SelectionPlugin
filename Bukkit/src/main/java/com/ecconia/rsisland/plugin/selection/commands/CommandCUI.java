@@ -22,5 +22,6 @@ public class CommandCUI extends Subcommand
 		checkPermission(sender);
 		
 		cui.forceEnable(getPlayer(sender));
+		f.n(sender, "Enabling CUI. Warning incompatibility possible.");
 	}
 }

@@ -13,7 +13,6 @@ import org.bukkit.event.player.PlayerUnregisterChannelEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-import com.ecconia.rsisland.plugin.selection.F;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
 import com.ecconia.rsisland.plugin.selection.api.ISelection;
 import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
@@ -61,7 +60,7 @@ public class CUICore implements Listener, ICUICore
 					}
 				}
 				//Some unknown format:
-				F.e(plugin.getServer().getConsoleSender(), "Unknown CUI packet from %v: %v. Please report to the plugin author.", player.getName(), message);
+				plugin.logger().error("Unknown CUI packet from %v: %v. Please report to the plugin author.", player.getName(), message);
 			}
 		});
 		
@@ -93,7 +92,7 @@ public class CUICore implements Listener, ICUICore
 			cuiPlayer.setEnabled(true);
 		}
 	}
-
+	
 	@EventHandler
 	public void onUnregistration(PlayerUnregisterChannelEvent event)
 	{
@@ -109,10 +108,6 @@ public class CUICore implements Listener, ICUICore
 	public void onLeave(PlayerQuitEvent event)
 	{
 		cuiPlayers.remove(event.getPlayer());
-//		if(cuiPlayers.remove(event.getPlayer()) != null)
-//		{
-//			F.n(plugin.getServer().getConsoleSender(), "Unregistered ", event.getPlayer().getName());
-//		}
 	}
 	
 	//#########################################################################
@@ -162,7 +157,6 @@ public class CUICore implements Listener, ICUICore
 	{
 		CUIPlayer cuiPlayer = getOrCreateCUIPlayer(player);
 		cuiPlayer.setEnabled(true);
-		F.n(player, "Enabling CUI. Warning incompatibility possible.");
 	}
 	
 	@Override
