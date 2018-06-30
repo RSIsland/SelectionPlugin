@@ -36,6 +36,11 @@ public class Selection implements ISelection
 		
 		if(changedBoth)
 		{
+			if(h == null)
+			{
+				h = new CuboidHelper();
+			}
+			
 			Point p = new Point(location);
 			h.resetBoth(p, p);
 			world = location.getWorld();
@@ -58,6 +63,11 @@ public class Selection implements ISelection
 		
 		if(changedBoth)
 		{
+			if(h == null)
+			{
+				h = new CuboidHelper();
+			}
+			
 			Point p = new Point(location);
 			h.resetBoth(p, p);
 			world = location.getWorld();
