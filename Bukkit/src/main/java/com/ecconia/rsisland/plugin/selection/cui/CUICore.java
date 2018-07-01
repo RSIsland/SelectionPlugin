@@ -13,24 +13,22 @@ import org.bukkit.event.player.PlayerUnregisterChannelEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import com.ecconia.rsisland.framework.commonelements.Cuboid;
 import com.ecconia.rsisland.plugin.selection.SelectionPlugin;
-import com.ecconia.rsisland.plugin.selection.api.ISelection;
 import com.ecconia.rsisland.plugin.selection.api.cui.CUICuboidConstruct;
 
 public class CUICore implements Listener, ICUICore
 {
-	private SelectionPlugin plugin;
-	
 	public static final String channel = "WECUI";
 	public static final int requiredVersion = 4;
-
-	private Map<Player, CUIPlayer> cuiPlayers;
 	
+	private final SelectionPlugin plugin;
+	private final Map<Player, CUIPlayer> cuiPlayers = new HashMap<>();
+	
+	//TODO: Make this Multiworld compatible, it will break.
 	public CUICore(SelectionPlugin plugin)
 	{
 		this.plugin = plugin;
-		
-		cuiPlayers = new HashMap<>();
 		
 		plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, channel);
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -74,11 +72,13 @@ public class CUICore implements Listener, ICUICore
 	private CUIPlayer getOrCreateCUIPlayer(Player player)
 	{
 		CUIPlayer cuiPlayer = cuiPlayers.get(player);
+		
 		if(cuiPlayer == null)
 		{
 			cuiPlayer = new CUIPlayer(plugin, player);
 			cuiPlayers.put(player, cuiPlayer);
 		}
+		
 		return cuiPlayer;
 	}
 	
@@ -87,9 +87,7 @@ public class CUICore implements Listener, ICUICore
 	{
 		if (event.getChannel().equals(channel))
 		{
-			Player player = event.getPlayer();
-			CUIPlayer cuiPlayer = getOrCreateCUIPlayer(player);
-			cuiPlayer.setEnabled(true);
+			getOrCreateCUIPlayer(event.getPlayer()).setEnabled(true);
 		}
 	}
 	
@@ -98,59 +96,18 @@ public class CUICore implements Listener, ICUICore
 	{
 		if(event.getChannel().equals(channel))
 		{
-			Player player = event.getPlayer();
-			CUIPlayer cuiPlayer = getOrCreateCUIPlayer(player);
-			cuiPlayer.setEnabled(false);
+			getOrCreateCUIPlayer(event.getPlayer()).setEnabled(false);
 		}
 	}
 	
 	@EventHandler
 	public void onLeave(PlayerQuitEvent event)
 	{
+		//When a player leaves his CUI resets, the whole object can be dumped.
 		cuiPlayers.remove(event.getPlayer());
 	}
 	
-	//#########################################################################
-	
-	public boolean hasCUI(Player player)
-	{
-		CUIPlayer cuiPlayer = cuiPlayers.get(player);
-		if(cuiPlayer != null)
-		{
-			return cuiPlayer.isEnabled();
-		}
-		return false;
-	}
-	
-	@Override
-	public void createSelection(Player player, ISelection selection)
-	{
-		if(hasCUI(player))
-		{
-//			F.n(player, "CUI: Created selection %v", selection.getName());
-			cuiPlayers.get(player).createSelection(selection);
-		}
-	}
-	
-	@Override
-	public void destroySelection(Player player, ISelection selection)
-	{
-		if(hasCUI(player))
-		{
-//			F.n(player, "CUI: Deleted selection %v", selection.getName());
-			cuiPlayers.get(player).destroySelection(selection);
-		}
-	}
-	
-	@Override
-	public void updateSelection(Player player, ISelection selection)
-	{
-		if(hasCUI(player))
-		{
-//			F.n(player, "CUI: Updated selection %v", selection.getName());
-			cuiPlayers.get(player).updateSelection(selection);
-		}
-	}
+	// Internal ###############################################################
 	
 	@Override
 	public void forceEnable(Player player)
@@ -160,23 +117,58 @@ public class CUICore implements Listener, ICUICore
 	}
 	
 	@Override
+	public void destroySelection(Player player, Object key)
+	{
+		CUIPlayer cuiPlayer = cuiPlayers.get(player);
+		
+		if(cuiPlayer != null && cuiPlayer.isEnabled())
+		{
+			cuiPlayer.destroySelection(key);
+		}
+	}
+	
+	@Override
+	public void updateSelection(Player player, Object key, Cuboid cuboid)
+	{
+		CUIPlayer cuiPlayer = cuiPlayers.get(player);
+		
+		if(cuiPlayer != null && cuiPlayer.isEnabled())
+		{
+			cuiPlayer.updateSelection(key, cuboid);
+		}
+	}
+	
+	// API-Triggered ##########################################################
+	
+	@Override
 	public boolean cuiEnabled(Player player)
 	{
-		return hasCUI(player);
+		CUIPlayer cuiPlayer = cuiPlayers.get(player);
+		
+		return cuiPlayer != null && cuiPlayer.isEnabled();
 	}
 	
 	@Override
 	public void replaceSelections(Player player, Plugin plugin, List<CUICuboidConstruct> areas)
 	{
-		if(hasCUI(player))
+		CUIPlayer cuiPlayer = cuiPlayers.get(player);
+		
+		if(cuiPlayer != null && cuiPlayer.isEnabled())
 		{
-			cuiPlayers.get(player).replaceSelections(areas);
+			cuiPlayer.replaceSelections(plugin, areas);
 		}
 	}
 	
 	@Override
 	public boolean hasSelections(Player player, Plugin plugin)
 	{
+		CUIPlayer cuiPlayer = cuiPlayers.get(player);
+		
+		if(cuiPlayer != null && cuiPlayer.isEnabled())
+		{
+			return cuiPlayer.hasSelections(plugin);
+		}
+		
 		return false;
 	}
 }

@@ -74,7 +74,7 @@ public class SelPlayer implements ISelPlayer
 			f.n(player, (hand.isFirstPos() ? "First" : "Second") + " point set for selection %v.", name);
 		}
 		
-		cui.updateSelection(player, sel);
+		cui.updateSelection(player, sel, sel.getCuboid());
 	}
 	
 	public Selection getSelection(String name)
@@ -86,8 +86,6 @@ public class SelPlayer implements ISelPlayer
 	{
 		Selection sel = new Selection(name);
 		selections.put(name, sel);
-		
-		cui.createSelection(player, sel);
 		
 		return sel;
 	}
@@ -101,6 +99,7 @@ public class SelPlayer implements ISelPlayer
 	public void remove(String name)
 	{
 		Selection selection = getSelection(name);
+		
 		if(selection == null)
 		{
 			throw new CommandException("You do not have a selection %v.", name);
@@ -167,7 +166,7 @@ public class SelPlayer implements ISelPlayer
 			f.n(player, "Shrinked selection %v by 1.", sel.getName());
 		}
 		
-		cui.updateSelection(player, sel);
+		cui.updateSelection(player, sel, sel.getCuboid());
 	}
 	
 	public Collection<Selection> getSelections()
@@ -200,7 +199,7 @@ public class SelPlayer implements ISelPlayer
 	{
 		//TODO: OHNONONOO this is a cancer call! Put it somewhere else!!!
 		lastEditedSelection = selection;
-		cui.updateSelection(player, selection);
+		cui.updateSelection(player, selection, selection.getCuboid());
 	}
 	
 	public void use(String name)
